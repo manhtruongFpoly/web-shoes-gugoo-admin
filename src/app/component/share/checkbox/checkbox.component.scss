@@ -1,0 +1,43 @@
+:host::ng-deep.mat-checkbox-checked.mat-accent.mat-checkbox-disabled .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: #F26522 !important;
+}
+
+.unclickable {
+  cursor: default;
+  pointer-events: none;
+}
+
+:host::ng-deep {
+
+  .mat-checkbox-checked .mat-checkbox-frame {
+    transform: scale(1);
+  }
+  .check-box-grid{
+    .mat-checkbox-layout{
+      .mat-checkbox-inner-container{
+        .mat-checkbox-frame{
+          border-radius: 5px !important;
+          width: 20px;
+          height: 20px;
+          border: 1px solid #d8dae5;
+        }
+      }
+    }
+  }
+    .mat-checkbox{
+      .mat-checkbox-layout{
+        .mat-checkbox-inner-container{
+          .mat-checkbox-ripple{
+            .mat-checkbox-frame{
+              border-radius: 5px !important;
+              width: 20px;
+              height: 20px;
+              border: 1px solid #d8dae5 !important;
+            }
+          }
+
+        }
+      }
+    }
+}
+

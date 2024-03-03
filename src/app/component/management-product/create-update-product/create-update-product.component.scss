@@ -1,0 +1,294 @@
+.modal-content {
+    .modal-header {
+        position: sticky;
+        top: 0;
+        z-index: 9999;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        border-bottom: 1px solid;
+        margin-bottom: 30px;
+
+        h4 {
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 30px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            text-transform: uppercase;
+            color: #101840;
+            margin-top: 15px;
+        }
+    }
+
+    .modal-body {
+        .input-label {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 24px;
+            color: #474D66;
+
+            span {
+                color: red;
+            }
+        }
+
+        .input-typing {
+            width: 390px;
+            height: 40px;
+            border: none;
+            border: 1px solid #D8DAE5;
+            border-radius: 4px;
+            padding: 12px;
+        }
+
+        .textarea-typing {
+            width: inherit;
+            min-height: 90px;
+            border: none;
+            border: 1px solid #D8DAE5;
+            border-radius: 4px;
+            padding: 12px;
+        }
+
+        .input-select {
+            width: 390px;
+            height: 40px;
+            border-radius: 6px;
+        }
+
+        .title-grid {
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 24px;
+            color: #101840;
+            margin-top: 5px;
+
+            span {
+                color: red;
+            }
+        }
+
+        .decentralization {
+            tr:nth-child(odd) {
+                background: #F4F6FA;
+            }
+
+            tr:nth-child(even) {
+                background: #fff;
+            }
+
+            width: 100%;
+
+            .decentralization_header {
+                height: 48px;
+                background: #F4F6FA;
+                position: sticky;
+                top: 0;
+                z-index: 3;
+
+                .header_no,
+                .header_function,
+                .header_apply,
+                .header_action {
+                    font-weight: 600;
+                    font-size: 10px;
+                    line-height: 16px;
+                    text-align: center;
+                    text-transform: uppercase;
+                    color: #8F95B2;
+                }
+
+                .header_no {
+                    width: 60px;
+                }
+
+                .header_function {
+                    width: 220px;
+                    text-align: left;
+                }
+
+                .header_apply {
+                    width: 90px;
+                }
+
+                .header_action {
+                    width: 342px;
+                }
+            }
+
+            .decentralization_body {
+                height: 72px;
+
+                .body_no,
+                .body_function,
+                .body_apply {
+                    font-weight: 500;
+                    font-size: 12px;
+                    line-height: 20px;
+                    text-align: center;
+                    color: #101840;
+                }
+
+                .body_function {
+                    text-align: left;
+
+                    p {
+                        margin: 0;
+                        white-space: nowrap;
+                        width: 220px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+
+                .body_action {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: inherit;
+
+                    .body_action_select {
+                        border: none;
+                        border-radius: 6px;
+                        width: 318px;
+                    }
+                }
+            }
+        }
+    }
+    .modal-footer{
+        position: sticky;
+        bottom: 0;
+        z-index: 9999;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        border-top: 1px solid;
+        margin-top: 30px;
+        .btn-action{
+            display: flex;
+            margin-top: 30px;
+            margin-bottom: 30px;
+          }
+          .btn-action-dv{
+            width: 105px;
+            height: 32px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 16px;
+            text-align: center;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+          }
+          .gray{
+            background: #E6E8F0;
+            color: #696F8C;
+          }
+          .orange{
+            background: #330387;
+          }
+    }
+}
+
+
+.validate-input{
+    .validate-input-label{
+      margin: 5px 0 0 !important;
+      color: red;
+      font-size: 12px;
+      line-height: 10px;
+      font-weight: 500;
+    }
+  }
+
+  .upload-img{
+    label{
+        .star{
+            color: red;
+        }
+        .title{
+            color: #696F8C;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 16px;
+            letter-spacing: -0.12px;
+            margin-left: 5px;
+        }
+    }
+    .upload-file-image{
+        display: flex;
+        .list-upload-file{
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.10);
+            margin: 12px 12px 16px 0px;
+            position: relative;
+            .icon{
+                position: absolute;
+                border-radius: 83.333px;
+                background: #FFF;
+                width: 20px;
+                height: 20px;
+                top: 40px;
+                left: 23px;
+                cursor: pointer;
+                svg{
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                }
+            }
+            .icon1{
+                position: absolute;
+                border-radius: 83.333px;
+                background: #FFF;
+                width: 20px;
+                height: 20px;
+                top: 40px;
+                left: 53px;
+                cursor: pointer;
+                svg{
+                    position: absolute;
+                    top: 2px;
+                    left: 3px;
+                }
+            }
+        }
+        .upload-file{
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.10);
+            margin: 12px 0px 16px 0px;
+            position: relative;
+            .img{
+                position: absolute;
+                top: 20px;
+                left: 17px;
+                cursor: pointer;
+            }
+            .img1{
+                position: absolute;
+                top: 43px;
+                left: 39px;
+                width: 20px;
+                height: 20px;
+                border-radius: 83.333px;
+                background: #FFF;
+                cursor: pointer;
+                svg{
+                    position: absolute;
+                    top: 3px;
+                    left: 2px;
+                }
+            }
+        }
+    }
+}

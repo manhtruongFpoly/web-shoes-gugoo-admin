@@ -1,0 +1,59 @@
+<div class="container-fluid">
+  <div class="prompt-management">
+    <div class="prompt-management-header-title">
+      <h1>Trang quản trị</h1>
+    </div>
+
+    <div class="header">
+      <div class="prompt-management-header">
+        <label for="">Danh sách prompt</label>
+      </div>
+      <div class="prompt-management-header-create blue">
+        <button (click)="openFormCreate()">
+          <svg _ngcontent-lkj-c19="" fill="none" height="12" viewBox="0 0 12 12" width="12"
+            xmlns="http://www.w3.org/2000/svg">
+            <rect _ngcontent-lkj-c19="" fill="white" height="12" rx="1" width="2" x="5"></rect>
+            <rect _ngcontent-lkj-c19="" fill="white" height="12" rx="1" transform="rotate(90 12 5)" width="2" x="12"
+              y="5">
+            </rect>
+          </svg>
+          Tạo mới
+        </button>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top: 50px;">
+      <ag-grid-angular
+        [suppressRowTransform]="true"
+        [tooltipShowDelay]="0"
+        [suppressRowClickSelection]="true"
+        style="width: 100%; min-height: 480px"
+        domLayout="{{ rowData.length ? 'autoHeight' : 'normal' }}"
+        class="ag-theme-balham"
+        [ngClass]="{'set-height-ag-root-wrapper': !rowData.length, 'top': !isShowSearch}"
+        [rowData]="rowData"
+        [columnDefs]="columnDefs"
+        [headerHeight]="headerHeight"
+        [suppressMovableColumns]="true"
+        [rowHeight]="rowHeight"
+        (gridReady)="onGridReady($event)"
+        (gridSizeChanged)="gridSizeChanged($event)"
+        [enableCellTextSelection]="true"
+      >
+      </ag-grid-angular>
+    </div>
+    <div style="margin-bottom: 32px;">
+      <app-pagination
+            [total]="total"
+            [totalPage]="totalPage"
+            [dataLength]="rowData?.length"
+            [pageSize]="pageSize"
+            [currentPage]="currentPage"
+            [collapse]="false"
+            (paginate)="searchProduct($event)">
+      </app-pagination>
+    </div>
+
+
+  </div>
+</div>

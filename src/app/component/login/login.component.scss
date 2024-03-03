@@ -1,0 +1,126 @@
+.error {
+  color: rgba(247, 90, 69, 0.757);
+}
+
+.container-fluid {
+
+  .form-login {
+
+    .logo {
+      img {
+        width: 27%;
+      }
+    }
+
+    .title {
+      display: flex;
+      margin-top: 50px;
+      align-items: center;
+      justify-content: center;
+
+      p {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 26px;
+        text-align: center;
+        color: #696f8c;
+      }
+    }
+
+    .title-login {
+      h5 {
+        margin-top: 35px;
+        margin-bottom: 15px;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 40px;
+        align-items: center;
+        text-align: center;
+        text-transform: uppercase;
+        color: #101840;
+      }
+    }
+
+    .form-customer {
+      padding-left: 10%;
+      padding-right: 10%;
+
+      .username .password {
+        label {
+          line-height: 24px;
+          color: #474d66;
+          // margin-top: 12px;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 14px;
+        }
+
+        input {
+          display: block;
+          width: 100%;
+          height: calc(1.5em + 1.3rem + 2px);
+          padding: 0.65rem 1rem;
+          font-size: 1rem;
+          font-weight: 400;
+          line-height: 1.5;
+          color: #3f4254;
+          background-color: #fff;
+          /* background-clip: padding-box; */
+          border: 1px solid #e4e6ef;
+          border-radius: 0.42rem;
+          box-shadow: none;
+          transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+      }
+
+      .submit-form {
+        .register-account{
+          display: flex;
+          justify-content: flex-end;
+          a{
+            font-style: normal;
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 24px;
+            color: #36f;
+            margin-top: 20px;
+            text-decoration: none;
+          }
+        }
+        .button-submit {
+          font-style: normal;
+          font-weight: 600;
+          font-size: 20px;
+          line-height: 24px;
+          text-align: left;
+          color: #474d66;
+          button {
+            margin-top: 30px;
+            background: #444bd1;
+            border-radius: 4px;
+            border: 1px;
+            line-height: 29px;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            color: #fff;
+            height: 47px;
+          }
+        }
+
+      }
+    }
+
+  }
+
+
+
+  .login-image {
+    img {
+      width: 101%;
+      height: 900px;
+    }
+  }
+}

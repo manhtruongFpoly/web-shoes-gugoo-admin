@@ -1,0 +1,54 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-5 form-login">
+      <!-- logo -->
+      <div class="row logo" >
+        <div>
+          <img src="/assets/img/logo.png" alt="" style="height: 200px; width: 650px;">
+        </div>
+      </div>
+
+      <!-- title -->
+      <div class="row" >
+        <div class="title">
+          <p>Hệ thống quản trị GenAI Tools</p>
+        </div>
+        <div class="title-login">
+          <h5>ĐĂNG NHẬP</h5>
+        </div>
+      </div>
+
+      <form action="" class="form-customer">
+        <!-- username -->
+        <div class="username">
+          <div class="mb-3">
+            <label for="username" class="form-label">Tên đăng nhập</label>
+            <input type="username" [(ngModel)]="user.username" name="username"
+            class="form-control" id="username" placeholder="Nhập tên đăng nhập">
+          </div>
+        </div>
+         <!-- username -->
+         <div class="password">
+          <label for="inputPassword5" class="form-label">Password</label>
+          <input type="password" [(ngModel)]="user.password" name="password"
+          id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
+         </div>
+         <!-- submit-form -->
+         <div class="submit-form">
+          <!-- <div class="register-account">
+            <a [routerLink]="['/register-account']"> Bạn chưa có tài khoản ? Đăng ký. </a>
+          </div> -->
+          <div class="button-submit">
+            <button (click)="submitForm()"> Đăng nhập </button>
+          </div>
+
+         </div>
+      </form>
+    </div>
+    <div class="col-7">
+      <div class="login-image">
+        <img src="/assets/img/hinhnen.jpg" alt="">
+      </div>
+    </div>
+  </div>
+</div>

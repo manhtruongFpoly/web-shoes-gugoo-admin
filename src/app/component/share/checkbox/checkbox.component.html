@@ -1,0 +1,20 @@
+<!-- checkbox in ag-grid -->
+<mat-checkbox class="check-box-grid" *ngIf="checkboxControl == undefined && !params.isHeader"
+              [class.unclickable]="params.isTickOnce && params.data[params.colDef?.type || params.column.colDef.type]"
+              [(ngModel)]="params.data[params.colDef?.type || params.column.colDef.type]"
+              (click)="onClick($event)"
+              (change)="onChangeCheckbox(this.params)"
+>
+</mat-checkbox>
+
+<!-- normal checkbox -->
+<mat-checkbox *ngIf="checkboxControl != undefined" [disabled]="checkboxControl.disabled" [checked]="checkboxControl.value" (change)="checkboxControl.setValue($event.checked ? 1 : 0)">
+</mat-checkbox>
+
+<!-- checkbox on header -->
+<mat-checkbox *ngIf="checkboxControl == undefined && params?.isHeader"
+              [disabled]="params.context.disabledCheckboxAll"
+              [(ngModel)]="params.context.checkboxHeaderValue"
+              (change)="onChangeHeader()"
+>
+</mat-checkbox>

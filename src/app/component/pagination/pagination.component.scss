@@ -1,0 +1,54 @@
+.sy-paging {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.sy-paging-result {
+    font-size: 12px !important;
+    color: #696F8C !important;
+}
+
+.sy-page {
+    background: white;
+    border-radius: 3px;
+    color: #696F8C;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    padding: 8px 12px;
+    margin: 0 1px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.sy-page.sy-highlight {
+    background: #FCE9E2;
+    color: #F26522;
+}
+
+.sy-dots {
+    background-color: white;
+    color: #696f8c;
+    cursor: default;
+}
+
+.disabled {
+    opacity: .7;
+    cursor: default;
+    pointer-events: none;
+}
+.hide-on-pc{
+  display: none !important;
+}
+:host::ng-deep{
+  @media screen and (max-width:767px) {
+    .hide-on-mobile{
+      display: none !important;
+    }
+    .hide-on-pc{
+      display: block !important;
+    }
+  }
+}
