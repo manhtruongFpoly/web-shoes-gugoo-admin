@@ -21,8 +21,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActionProductManageComponent } from './component/management-product/action-product-manage/action-product-manage.component';
 import { ManagementProductComponent } from './component/management-product/management-product.component';
 import { CreateUpdateProductComponent } from './component/management-product/create-update-product/create-update-product.component';
-import { BuyOfflineTestComponent } from './component/Buy-offline/buy-offline-test/buy-offline-test.component';
-import { BuyOfflineComponent } from './component/Buy-offline/buy-offline/buy-offline.component';
 
 @NgModule({
   declarations: [
@@ -41,8 +39,8 @@ import { BuyOfflineComponent } from './component/Buy-offline/buy-offline/buy-off
     ManagementProductComponent,
     CreateUpdateProductComponent,
 
-    BuyOfflineTestComponent,
-    BuyOfflineComponent,
+    // BuyOfflineTestComponent,
+    // BuyOfflineComponent,
   ],
   imports: [
     FormsModule,
