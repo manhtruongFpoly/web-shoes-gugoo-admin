@@ -208,7 +208,10 @@ export class CreateUpdateProductComponent implements OnInit {
   }
 
   uploadImage() {
-    this.productService.uploadImages(this.listFileUpload).subscribe(response => {
+    this.productService.uploadImages({
+      data: this.body,
+      listFileUpload: this.listFileUpload
+    }).subscribe(response => {
       this.isLoading = false;
       this.toaStr.success('Create category successfuly');
       console.log(response.data);

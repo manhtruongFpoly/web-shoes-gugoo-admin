@@ -18,7 +18,6 @@ export class AuthenticatedComponent implements OnInit {
   username;
   fullname;
   checkRole = false
-  functionCode;
 
   ngOnInit() {
     // this.username = this.tokenStorageService.getUser();
@@ -82,7 +81,6 @@ export class AuthenticatedComponent implements OnInit {
     this.tokenStorageService.clearUser();
     window.location.reload();
     sessionStorage.removeItem('role');
-    sessionStorage.removeItem('functionCode');
     sessionStorage.removeItem(environment.authTokenKey);
     this.toastr.success('Đăng xuất thành công');
   }

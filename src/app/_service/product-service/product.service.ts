@@ -38,11 +38,15 @@ export class ProductService {
     return this.http.post(AUTH_API + "/upload-images", formData);
   }
 
-  uploadImages(files: File[]): Observable<any> {
+  uploadImages(body: any): Observable<any> {
     const formData = new FormData();
   
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
+    for (let i = 0; i < body.listFileUpload.length; i++) {
+      formData.append('files', body.listFileUpload[i]);
+    }
+
+    for (let key in body.data) {
+      formData.append(key, body.data[key]);
     }
   
     return this.http.post(AUTH_API + "/upload-list-images", formData);
