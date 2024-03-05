@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { OrderTheCounter } from 'src/app/_model/AtTheCounterOrder';
 import { Delivery } from 'src/app/_model/DeliveryOrder';
 
-const URL_order = "http://localhost:8080/api/v1/order"
-const URL_orderdetail = "http://localhost:8080/api/v1/orderDetail"
+const URL_order = "http://localhost:8084/api/v1/order"
+const URL_orderdetail = "http://localhost:8084/api/v1/orderDetail"
 
 @Injectable({
   providedIn: 'root'

@@ -1,0 +1,66 @@
+
+.loading {
+    background: rgba(0, 0, 0, .5);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+  }
+
+  .spinner-center {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+  }
+  .mat-stepper-horizontal {
+    margin-top: 8px;
+  }
+
+  .mat-form-field {
+    margin-top: 16px;
+  }
+
+  ::ng-deep .mat-form-field {
+    width : 100%;
+  }
+
+
+  .input-label {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    color: #474D66;
+
+    span {
+        color: red;
+    }
+}
+
+.input-typing {
+    width: 235px;
+    height: 40px;
+    border: none;
+    border: 1px solid #D8DAE5;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.textarea-typing {
+    width: inherit;
+    min-height: 90px;
+    border: none;
+    border: 1px solid #D8DAE5;
+    border-radius: 4px;
+    padding: 12px;
+}
+
+.input-select {
+    width: 235px;
+    height: 40px;
+    border-radius: 6px;
+}
+
+
+

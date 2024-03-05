@@ -6,6 +6,7 @@ import { AuthenticatedComponent } from './component/authenticated/authenticated.
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { AuthGuard } from './_helper/auth.guard';
 import { ManagementProductComponent } from './component/management-product/management-product.component';
+import { BuyOfflineComponent } from './component/Buy-offline/buy-offline/buy-offline.component';
 
 
 const routes: Routes = [
@@ -21,6 +22,7 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'list-management-product', component: ManagementProductComponent, canActivate: [AuthGuard] },
+      { path: 'buy-offline', component: BuyOfflineComponent, canActivate: [AuthGuard]},
     ]
   }
 ];

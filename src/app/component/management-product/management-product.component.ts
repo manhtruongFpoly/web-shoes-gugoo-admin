@@ -333,7 +333,6 @@ export class ManagementProductComponent implements OnInit {
       pageSize: this.pageSize
       
     }
-
     this.currentPage = page;
 
     this.productService.searchProduct(data).subscribe((res:any)=>{
