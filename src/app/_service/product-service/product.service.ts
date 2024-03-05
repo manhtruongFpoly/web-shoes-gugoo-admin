@@ -47,6 +47,7 @@ export class ProductService {
 
     for (let key in body.data) {
       formData.append(key, body.data[key]);
+      formData.delete('id');
     }
   
     return this.http.post(AUTH_API + "/upload-list-images", formData);
