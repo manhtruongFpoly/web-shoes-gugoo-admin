@@ -28,6 +28,7 @@
     "ag-grid-community": "^25.3.0",
     "ag-grid-enterprise": "^25.3.0",
     "bootstrap": "^4.4.0",
+    "crypto-js": "^4.2.0",
     "moment": "^2.29.4",
     "ngx-bootstrap": "^7.0.0",
     "ngx-toastr": "^13.2.1",
