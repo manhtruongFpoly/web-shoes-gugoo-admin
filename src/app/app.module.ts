@@ -10,7 +10,7 @@ import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { SpinnerComponent } from './component/spinner/spinner.component';
 import { PaginationComponent } from './component/pagination/pagination.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrModule } from 'ngx-toastr';
@@ -21,6 +21,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActionProductManageComponent } from './component/management-product/action-product-manage/action-product-manage.component';
 import { ManagementProductComponent } from './component/management-product/management-product.component';
 import { CreateUpdateProductComponent } from './component/management-product/create-update-product/create-update-product.component';
+import { BuyOfflineComponent } from './component/Buy-offline/buy-offline/buy-offline.component';
+import { AuthInterceptor } from './_helper/auth.interceptor';
+import { GhnInterceptor } from './_helper/ghn.interceptor';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,7 @@ import { CreateUpdateProductComponent } from './component/management-product/cre
     CreateUpdateProductComponent,
 
     // BuyOfflineTestComponent,
-    // BuyOfflineComponent,
+    BuyOfflineComponent,
   ],
   imports: [
     FormsModule,
@@ -63,7 +66,18 @@ import { CreateUpdateProductComponent } from './component/management-product/cre
     AgGridModule.withComponents([
     ]),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: GhnInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
