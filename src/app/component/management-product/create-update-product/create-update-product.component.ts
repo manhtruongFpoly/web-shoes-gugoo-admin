@@ -123,6 +123,7 @@ export class CreateUpdateProductComponent implements OnInit {
     this.validDescriptions = CommonFunction.validateInput(this.body.description, 1000, null);
     if (!this.body.description || !this.body.description.trim()) {
       this.validDescriptions.empty = false;
+      this.validDescriptions.done = true;
     }
   }
 
