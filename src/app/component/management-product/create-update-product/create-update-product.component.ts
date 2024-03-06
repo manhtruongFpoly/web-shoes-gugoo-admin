@@ -8,7 +8,6 @@ import { CommonFunction } from 'src/app/utils/common-function';
 import { SizeService } from 'src/app/_service/size-service/size.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ProductService } from 'src/app/_service/product-service/product.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-update-product',
@@ -24,6 +23,7 @@ export class CreateUpdateProductComponent implements OnInit {
     code: null,
     name: null,
     price: null,
+    discount: null,
     description: null,
     listTransSize: null,
     listTransColor: null
@@ -33,6 +33,7 @@ export class CreateUpdateProductComponent implements OnInit {
   validName:ValidateInput = new ValidateInput();
   validPrice:ValidateInput = new ValidateInput();
   validDiscount:ValidateInput = new ValidateInput();
+  validImg: ValidateInput = new ValidateInput();
   validDescriptions:ValidateInput = new ValidateInput();
 
   messagerListType: boolean;
@@ -91,13 +92,15 @@ export class CreateUpdateProductComponent implements OnInit {
 
 
   submit(){
+    this.validateCode();
+    this.validateName();
+    this.validatePrice();
+    this.validateDiscount();
+    this.validDescription();
+
+    if (!this.validCode.done || !this.validName.done || !this.validPrice.done || !this.validDiscount.done || !this.validDescriptions.done || !this.validateImg()) return;
 
     this.uploadImage();
-
-    // this.productService.createProduct(this.body).subscribe((res)=>{
-    //   this.toaStr.success('Them san pham thành công');
-    // })
-
   }
 
   validateCode(){
@@ -109,15 +112,31 @@ export class CreateUpdateProductComponent implements OnInit {
   }
 
   validatePrice(){
-    this.validCode = CommonFunction.validateInput(this.body.name, null, null)
+    this.validPrice = CommonFunction.validateNumberInput(this.body.price, null, null);
   }
 
   validateDiscount(){
-    this.validCode = CommonFunction.validateInput(this.body.name, null, null)
+    this.validDiscount = CommonFunction.validateNumberInput(this.body.discount, null, null)
   }
 
   validDescription(){
-    this.validDescriptions = CommonFunction.validateInput(this.body.description, 1000, null)
+    this.validDescriptions = CommonFunction.validateInput(this.body.description, 1000, null);
+    if (!this.body.description || !this.body.description.trim()) {
+      this.validDescriptions.empty = false;
+      this.validDescriptions.done = true;
+    }
+  }
+
+  validateImg() {
+    if (this.listFileUpload.length == 0) {
+      this.validImg.empty = true;
+      this.validImg.done = false;
+      return false;
+    } else {
+      this.validImg.empty = false;
+      this.validImg.done = true;
+      return true;
+    }
   }
 
   closeModal(){
@@ -162,9 +181,12 @@ export class CreateUpdateProductComponent implements OnInit {
 			}
    	}
 
+    if (!this.validateImg()) {
+      return;
+    }
+
     files.target.value = null;
   }
-
 
   isLoading: boolean = true;
   products: any[] = [];
@@ -172,18 +194,6 @@ export class CreateUpdateProductComponent implements OnInit {
   selectedFiles?: FileList;
   currentFile?: File;
   preview = '';
-
-  imageformAdd = new FormGroup({
-    'name': new FormControl('', [Validators.required]),
-    'link': new FormControl('', [Validators.required]),
-    'product_id': new FormControl(1, [Validators.required]),
-    'file': new FormControl('', [Validators.required]),
-  })
-
-
-  get f() {
-    return this.imageformAdd.controls;
-  }
 
   onFileChange(event: any) {
     this.preview = '';
@@ -208,7 +218,10 @@ export class CreateUpdateProductComponent implements OnInit {
   }
 
   uploadImage() {
-    this.productService.uploadImages(this.listFileUpload).subscribe(response => {
+    this.productService.uploadImages({
+      data: this.body,
+      listFileUpload: this.listFileUpload
+    }).subscribe(response => {
       this.isLoading = false;
       this.toaStr.success('Create category successfuly');
       console.log(response.data);

@@ -38,12 +38,20 @@ export class ProductService {
     return this.http.post(AUTH_API + "/upload-images", formData);
   }
 
-  uploadImages(files: File[]): Observable<any> {
+  uploadImages(body: any): Observable<any> {
     const formData = new FormData();
   
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
+    for (let i = 0; i < body.listFileUpload.length; i++) {
+      formData.append('files', body.listFileUpload[i]);
     }
+
+    formData.append('code', body.data.code);
+    formData.append('name', body.data.name);
+    formData.append('price', body.data.price);
+    formData.append('discount', body.data.discount);
+    formData.append('description', body.data.description);
+    formData.append('listSizes', body.data.listTransSize);
+    formData.append('listColors', body.data.listTransColor);
   
     return this.http.post(AUTH_API + "/upload-list-images", formData);
   }

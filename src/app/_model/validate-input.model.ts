@@ -5,4 +5,5 @@ export class ValidateInput {
   maxLength = false
   regex = false
   done = false
+  format = false;
 }
