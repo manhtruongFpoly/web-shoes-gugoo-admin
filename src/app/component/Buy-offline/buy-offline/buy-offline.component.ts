@@ -7,7 +7,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CategoryService } from '../../../_service/category-service/category.service';
 import { OrderService } from '../../../_service/order-service/order.service';
 import { GhnService } from '../../../_service/ghn-service/ghn.service';
-import { error, data } from 'jquery';
 import { ExportOrderServiceService } from '../../../_service/export-service/export-order-service.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TokenStorageService } from '../../../_service/token-storage-service/token-storage.service';

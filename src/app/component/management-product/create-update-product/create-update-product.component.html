@@ -7,22 +7,21 @@
   <div class="modal-body" style="padding: 15px;">
     <div class="row"> 
       <div class="col-md-6">
-        <label class="input-label"> nhap Ma Code <span>*</span></label>
+        <label class="input-label"> Code <span>*</span></label>
         <input type="text" class="input-typing overflow-dot" [(ngModel)]="body.code"
           (keydown)="revoveInvalid(validCode)" (blur)="validateCode()" [disabled]="isUpdate"
           placeholder="Nhập Code" matTooltipClass="material-tooltip">
         <div class="validate-input" *ngIf="!validCode.done">
-          <p class="validate-input-label" *ngIf="validCode.empty">validCode không được bỏ trống</p>
-          <p class="validate-input-label" *ngIf="validCode.maxLength">validCode không được nhập quá 50 ký tự</p>
-          <p class="validate-input-label" *ngIf="validCode.UTF8 || validCode.space">validCode không được chứa kí
-            tự có dấu hoặc khoảng trắng</p>
+          <p class="validate-input-label" *ngIf="validCode.empty">Code không được bỏ trống</p>
+          <p class="validate-input-label" *ngIf="validCode.maxLength">Code không được nhập quá 50 ký tự</p>
+          <p class="validate-input-label" *ngIf="validCode.UTF8 || validCode.space">Code không được chứa kí tự có dấu hoặc khoảng trắng</p>
         </div>
       </div>
 
       <div class="col-md-6">
         <label class="input-label">Tên sản phẩm <span>*</span></label>
         <input type="text" class="input-typing overflow-dot" [(ngModel)]="body.name"
-          (keydown)="revoveInvalid(validName)" (blur)="validateCode()"
+          (keydown)="revoveInvalid(validName)" (blur)="validateName()"
           placeholder="Nhập tên sản phẩm" matTooltipClass="material-tooltip">
         <div class="validate-input" *ngIf="!validName.done">
           <p class="validate-input-label" *ngIf="validName.empty">Tên sản phẩm không được bỏ trống</p>
@@ -33,33 +32,35 @@
       <div class="col-md-6">
         <label class="input-label">Giá sản phẩm <span>*</span></label>
         <input type="text" class="input-typing overflow-dot" [(ngModel)]="body.price"
-          (keydown)="revoveInvalid(validName)" (blur)="validatePrice()" 
+          (keydown)="revoveInvalid(validPrice)" (blur)="validatePrice()" 
           placeholder="Nhập giá sản phẩm" matTooltipClass="material-tooltip">
-        <div class="validate-input" *ngIf="!validName.done">
-          <p class="validate-input-label" *ngIf="validName.empty">Giá sản phẩm không được bỏ trống</p>
-          <p class="validate-input-label" *ngIf="validName.maxLength">Giá sản phẩm không được nhập quá 50 ký tự</p>
+        <div class="validate-input" *ngIf="!validPrice.done">
+          <p class="validate-input-label" *ngIf="validPrice.empty">Giá sản phẩm không được bỏ trống</p>
+          <p class="validate-input-label" *ngIf="validPrice.maxLength">Giá sản phẩm không được nhập quá 50 ký tự</p>
+          <p class="validate-input-label" *ngIf="validPrice.format">Giá sản phẩm không đúng định dạng</p>
         </div>
       </div>
 
       <div class="col-md-6">
-        <label class="input-label"> nhap Giam gia <span>*</span></label>
-        <input type="text" class="input-typing overflow-dot" [(ngModel)]="body.price"
-          (keydown)="revoveInvalid(validName)" (blur)="validatePrice()" 
-          placeholder="Nhập giá Giam gia" matTooltipClass="material-tooltip">
-        <div class="validate-input" *ngIf="!validName.done">
-          <p class="validate-input-label" *ngIf="validName.empty">Giam gia không được bỏ trống</p>
-          <p class="validate-input-label" *ngIf="validName.maxLength">Giam gia không được nhập quá 50 ký tự</p>
+        <label class="input-label"> Giảm giá <span>*</span></label>
+        <input type="text" class="input-typing overflow-dot" [(ngModel)]="body.discount"
+          (keydown)="revoveInvalid(validDiscount)" (blur)="validateDiscount()" 
+          placeholder="Nhập giá Giảm giá" matTooltipClass="material-tooltip">
+        <div class="validate-input" *ngIf="!validDiscount.done">
+          <p class="validate-input-label" *ngIf="validDiscount.empty">Giảm giá không được bỏ trống</p>
+          <p class="validate-input-label" *ngIf="validDiscount.maxLength">Giảm giá không được nhập quá 50 ký tự</p>
+          <p class="validate-input-label" *ngIf="validDiscount.format">Giảm giá không đúng định dạng</p>
         </div>
       </div>
 
       <div class="col-md-6">
-        <label for="">Chon size <span>*</span></label>
+        <label for="">Chọn size <span>*</span></label>
         <ng-select
           [items]="listAllSize"
           style="font-size: 12px; font-family: Inter; height: 40px;"
           bindLabel="name"
           bindValue="id"
-          placeholder="lua chon"
+          placeholder="Lựa chọn"
           [hideSelected]="false"
           [closeOnSelect]="false"
           [multiple]="true"
@@ -90,13 +91,13 @@
       </div>
 
       <div class="col-md-6">
-        <label for="">Chon Color <span>*</span></label>
+        <label for="">Chọn Color <span>*</span></label>
         <ng-select
           [items]="listAllColor"
           style="font-size: 12px; font-family: Inter; height: 40px;"
           bindLabel="name"
           bindValue="id"
-          placeholder="lua chon"
+          placeholder="Lựa chọn"
           [hideSelected]="false"
           [closeOnSelect]="false"
           [multiple]="true"
@@ -181,21 +182,24 @@
                     style="display: none;">
             </div>
           </div>
-    
+
+          <div class="validate-input" *ngIf="!validImg.done">
+            <p class="validate-input-label" *ngIf="validImg.empty">Ảnh không được bỏ trống</p>
+          </div>
         </div>
       </div> 
 
       <div class="col-md-12">
-        <label class="input-label" style="margin-top: 12px;">description</label>
+        <label class="input-label" style="margin-top: 12px;">Mô tả</label>
         <textarea type="text" 
                   (blur)="validDescription()"
                   class="textarea-typing" 
                   [(ngModel)]="body.description" 
-                  placeholder="Nhập description">
+                  placeholder="Nhập mô tả">
         </textarea>
         <div class="validate-input" *ngIf="!validDescriptions.done">
-          <p class="validate-input-label" *ngIf="validDescriptions.empty">description không được để trống</p>
-          <p class="validate-input-label" *ngIf="validDescriptions.maxLength">description không được nhập quá 1000 ký tự</p>
+          <p class="validate-input-label" *ngIf="validDescriptions.empty">Mô tả không được để trống</p>
+          <p class="validate-input-label" *ngIf="validDescriptions.maxLength">Mô tả không được nhập quá 1000 ký tự</p>
         </div> 
 
       </div>

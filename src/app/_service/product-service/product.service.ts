@@ -45,10 +45,13 @@ export class ProductService {
       formData.append('files', body.listFileUpload[i]);
     }
 
-    for (let key in body.data) {
-      formData.append(key, body.data[key]);
-      formData.delete('id');
-    }
+    formData.append('code', body.data.code);
+    formData.append('name', body.data.name);
+    formData.append('price', body.data.price);
+    formData.append('discount', body.data.discount);
+    formData.append('description', body.data.description);
+    formData.append('listSizes', body.data.listTransSize);
+    formData.append('listColors', body.data.listTransColor);
   
     return this.http.post(AUTH_API + "/upload-list-images", formData);
   }

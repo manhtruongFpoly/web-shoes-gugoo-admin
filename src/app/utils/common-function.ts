@@ -91,6 +91,26 @@ export class CommonFunction {
     return result;
   }
 
+  static validateNumberInput(text,maxLength,regex){
+    let result:ValidateInput = new ValidateInput();
+    if(this.validateInputModel(text,maxLength,regex) !== undefined){
+      result = this.validateInputModel(text,maxLength,regex)
+    }
+
+    if(result.empty === false && result.maxLength === false && result.regex === false){
+      result.done = true
+    }
+
+    if (/^[^1-9][^0-9]*$/.test(text)) {
+      result.done = false;
+      result.format = true;
+    } else {
+      result.done = true;
+      result.format = false;
+    }
+    return result;
+  }
+
   static validateInput2(text,isEmpty,maxLength,regex){
     let result:ValidateInput = new ValidateInput();
     if(this.validateInputModel(text,maxLength,regex) !== undefined){
