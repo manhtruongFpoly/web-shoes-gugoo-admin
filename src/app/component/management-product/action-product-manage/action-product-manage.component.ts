@@ -3,14 +3,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { CreateUpdateProductComponent } from '../create-update-product/create-update-product.component';
+import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-action-product-manage',
   templateUrl: './action-product-manage.component.html',
   styleUrls: ['./action-product-manage.component.scss']
 })
-export class ActionProductManageComponent implements OnInit {
-
+export class ActionProductManageComponent implements OnInit, ICellRendererAngularComp {
   cellValue;
   rowIndex;
   modalRef: BsModalRef;
@@ -24,8 +24,7 @@ export class ActionProductManageComponent implements OnInit {
   ngOnInit() {
   }
 
-
-  agInit(params ): void {
+  agInit(params): void {
     this.cellValue = params.data;
     this.rowIndex = +params.rowIndex + 1;
   }

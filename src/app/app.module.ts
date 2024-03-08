@@ -24,6 +24,7 @@ import { CreateUpdateProductComponent } from './component/management-product/cre
 import { BuyOfflineComponent } from './component/Buy-offline/buy-offline/buy-offline.component';
 import { AuthInterceptor } from './_helper/auth.interceptor';
 import { GhnInterceptor } from './_helper/ghn.interceptor';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { GhnInterceptor } from './_helper/ghn.interceptor';
       useClass: GhnInterceptor,
       multi: true,
     },
+    BsModalService
   ],
   bootstrap: [AppComponent]
 })

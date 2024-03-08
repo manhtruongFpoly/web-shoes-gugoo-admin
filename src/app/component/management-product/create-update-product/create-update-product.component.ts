@@ -58,6 +58,12 @@ export class CreateUpdateProductComponent implements OnInit {
   ngOnInit():void {
     this.listSize();
     this.listColor();
+    this.body.code = this.data.code;
+    this.body.name = this.data.name;
+    this.body.price = this.data.price;
+    this.body.discount = this.data.discount;
+    this.body.listTransSize = JSON.parse(this.data.listSizes).map(x => x.key);
+    this.body.listTransColor = JSON.parse(this.data.listColors).map(x => x.key);
   }
 
   validate(){
