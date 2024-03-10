@@ -101,7 +101,7 @@ export class CommonFunction {
       result.done = true
     }
 
-    if (/^[^1-9][^0-9]*$/.test(text)) {
+    if (/^[^0-9]+$/.test(text)) {
       result.done = false;
       result.format = true;
     } else {

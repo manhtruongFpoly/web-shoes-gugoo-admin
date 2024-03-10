@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { EventEmitterService } from 'src/app/_service/event-emitter.service';
 import { TokenStorageService } from 'src/app/_service/token-storage-service/token-storage.service';
 import { environment } from 'src/environments/environment';
 
@@ -12,12 +13,14 @@ export class AuthenticatedComponent implements OnInit {
 
   constructor(
     private tokenStorageService: TokenStorageService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private eventService: EventEmitterService
   ) { }
 
   username;
   fullname;
   checkRole = false
+  keySearch = '';
 
   ngOnInit() {
     // this.username = this.tokenStorageService.getUser();
@@ -76,6 +79,12 @@ export class AuthenticatedComponent implements OnInit {
   //     + " " + this.authenQLQS + " " +this.authenQLPT);
 
   // }
+
+  search() {
+    this.eventService.searchEmitter({
+      keySearch: this.keySearch
+    });
+  }
 
   logout(){
     this.tokenStorageService.clearUser();

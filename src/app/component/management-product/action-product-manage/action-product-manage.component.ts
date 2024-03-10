@@ -4,6 +4,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { CreateUpdateProductComponent } from '../create-update-product/create-update-product.component';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { ProductService } from 'src/app/_service/product-service/product.service';
 
 @Component({
   selector: 'app-action-product-manage',
@@ -19,6 +20,7 @@ export class ActionProductManageComponent implements OnInit, ICellRendererAngula
     private matDialog : MatDialog,
     private modalService: BsModalService,
     private toaStr : ToastrService,
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
@@ -58,7 +60,10 @@ export class ActionProductManageComponent implements OnInit, ICellRendererAngula
   }
 
   deleteProduct(){
-   
+    this.productService.deleteProduct(this.cellValue.id).subscribe(res => {
+      this.toaStr.success("Xóa sản phẩm thành công!!!");
+      this.modalRef.hide();
+    });
   }
 
 }

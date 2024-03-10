@@ -23,8 +23,8 @@ export class ProductService {
     return this.http.post(AUTH_API + '/create/product',data);
   }
 
-  deleteProduct(data): Observable<any>{
-    return this.http.post(AUTH_API + '/delete/product',data);
+  deleteProduct(id): Observable<any>{
+    return this.http.delete(AUTH_API + '/delete/' + id);
   }
 
   updateProduct(data): Observable<any>{
@@ -45,13 +45,25 @@ export class ProductService {
       formData.append('files', body.listFileUpload[i]);
     }
 
+    if (body.data.id) {
+      formData.append('id', body.data.id);
+    }
+
     formData.append('code', body.data.code);
     formData.append('name', body.data.name);
     formData.append('price', body.data.price);
     formData.append('discount', body.data.discount);
-    formData.append('description', body.data.description);
+
+    if (body.data.description != null) {
+      formData.append('description', body.data.description);
+    }
+
     formData.append('listSizes', body.data.listTransSize);
     formData.append('listColors', body.data.listTransColor);
+    
+    body.listImgDelete.forEach(e => {
+      formData.append('listImgDelete', e);
+    });
   
     return this.http.post(AUTH_API + "/upload-list-images", formData);
   }

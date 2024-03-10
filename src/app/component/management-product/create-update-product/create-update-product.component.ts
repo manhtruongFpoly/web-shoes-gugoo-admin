@@ -43,6 +43,8 @@ export class CreateUpdateProductComponent implements OnInit {
 
   listFileUpload = [];
   listImagePaths = [];
+  listImgAvail = [];
+  listImgDelete = [];
 
   constructor(
     private changeDetechtorRef: ChangeDetectorRef,
@@ -58,12 +60,14 @@ export class CreateUpdateProductComponent implements OnInit {
   ngOnInit():void {
     this.listSize();
     this.listColor();
+    this.body.id = this.data.id;
     this.body.code = this.data.code;
     this.body.name = this.data.name;
     this.body.price = this.data.price;
     this.body.discount = this.data.discount;
     this.body.listTransSize = JSON.parse(this.data.listSizes).map(x => x.key);
     this.body.listTransColor = JSON.parse(this.data.listColors).map(x => x.key);
+    this.listImgAvail = this.data.imgList?.split(',');
   }
 
   validate(){
@@ -134,7 +138,7 @@ export class CreateUpdateProductComponent implements OnInit {
   }
 
   validateImg() {
-    if (this.listFileUpload.length == 0) {
+    if (this.listFileUpload.length + this.listImgAvail.length == 0) {
       this.validImg.empty = true;
       this.validImg.done = false;
       return false;
@@ -156,6 +160,11 @@ export class CreateUpdateProductComponent implements OnInit {
 
   sanitizeBlobUrl(blobUrl: string): SafeUrl {
     return this.sanitizer.bypassSecurityTrustUrl(blobUrl);
+  }
+
+  deleteFileAvail(imgPath) {
+    this.listImgAvail = this.listImgAvail.filter(img => img != imgPath);
+    this.listImgDelete.push(imgPath);
   }
 
   deleteFileUpload(index) {
@@ -226,7 +235,8 @@ export class CreateUpdateProductComponent implements OnInit {
   uploadImage() {
     this.productService.uploadImages({
       data: this.body,
-      listFileUpload: this.listFileUpload
+      listFileUpload: this.listFileUpload,
+      listImgDelete: this.listImgDelete
     }).subscribe(response => {
       this.isLoading = false;
       this.toaStr.success('Create category successfuly');

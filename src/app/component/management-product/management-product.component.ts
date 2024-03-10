@@ -5,6 +5,7 @@ import { ActionProductManageComponent } from './action-product-manage/action-pro
 import { ProductService } from 'src/app/_service/product-service/product.service';
 import { CreateUpdateProductComponent } from './create-update-product/create-update-product.component';
 import * as moment from 'moment';
+import { EventEmitterService } from 'src/app/_service/event-emitter.service';
 
 @Component({
   selector: 'app-management-product',
@@ -31,7 +32,8 @@ export class ManagementProductComponent implements OnInit {
   constructor(
     private matDialog: MatDialog,
     private changeDetechtorRef: ChangeDetectorRef,
-    private productService: ProductService
+    private productService: ProductService,
+    private eventEmitterService: EventEmitterService
   ) {
     this.rowData = [];
     this.buildColumnDefs();
@@ -39,6 +41,9 @@ export class ManagementProductComponent implements OnInit {
 
   ngOnInit() {
     this.searchProduct(1);
+    this.eventEmitterService.search.subscribe(data => {
+      this.searchProduct(1, data.keySearch);
+    });
   }
 
   buildColumnDefs(){
@@ -324,15 +329,15 @@ export class ManagementProductComponent implements OnInit {
     ];
   }
 
-  searchProduct(page){
+  searchProduct(page, keySearch?){
     const data = {
       data: {
-
+        keySearch
       },
       page: page - 1,
       pageSize: this.pageSize
-      
     }
+
     this.currentPage = page;
 
     this.productService.searchProduct(data).subscribe((res:any)=>{
@@ -349,8 +354,6 @@ export class ManagementProductComponent implements OnInit {
 
       this.changeDetechtorRef.detectChanges();
     })
-
-
   }
 
 
