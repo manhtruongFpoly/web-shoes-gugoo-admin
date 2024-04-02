@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class CategoryService {
 
-  url = 'http://localhost:8080/api/v1/category';
+  url = 'http://localhost:8084/api/v1/category';
   url_groupComponent = 'http://localhost:8080/api/v1/component';
 
   constructor(
@@ -65,8 +65,8 @@ export class CategoryService {
   getAllCategoryByGroupId(id:number):Observable<any>{
     return this.httpClient.get(this.url + "/list-group/" + id );
   }
-  getAllCategoryByStatus(status:any):Observable<any>{
-    return this.httpClient.get(this.url + "/list-status/" + status );
+  getAllCategoryByStatus():Observable<any>{
+    return this.httpClient.get(this.url + "/list-status" );
   }
 
 }

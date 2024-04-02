@@ -1,7 +1,11 @@
+<div *ngIf="isLoading" class="loading">
+  <div class="spinner-border text-primary spinner-center" role="status">
+  </div>
+</div>
 <div class="modal-content modal-dialog-custom">
   <div class="modal-header">
-    <h4 *ngIf="!isUpdate">Thêm mới Prompt</h4>
-    <h4 *ngIf="isUpdate">CẬP NHẬT Prompt</h4>
+    <h4 *ngIf="!isUpdate">Thêm mới sản phẩm</h4>
+    <h4 *ngIf="isUpdate">CẬP NHẬT sản phẩm</h4>
   </div>
 
   <div class="modal-body" style="padding: 15px;">
@@ -31,7 +35,9 @@
 
       <div class="col-md-6">
         <label class="input-label">Giá sản phẩm <span>*</span></label>
-        <input type="text" class="input-typing overflow-dot" [(ngModel)]="body.price"
+        <input type="text" 
+          class="input-typing overflow-dot" 
+          [(ngModel)]="body.price"
           (keydown)="revoveInvalid(validPrice)" (blur)="validatePrice()" 
           placeholder="Nhập giá sản phẩm" matTooltipClass="material-tooltip">
         <div class="validate-input" *ngIf="!validPrice.done">
@@ -41,16 +47,27 @@
         </div>
       </div>
 
-      <div class="col-md-6">
+      <!-- <div class="col-md-6">
         <label class="input-label"> Giảm giá <span>*</span></label>
-        <input type="text" class="input-typing overflow-dot" [(ngModel)]="body.discount"
-          (keydown)="revoveInvalid(validDiscount)" (blur)="validateDiscount()" 
+        <input type="number" class="input-typing overflow-dot"  
+          min="0"
+          max="100"
+        [(ngModel)]="body.discount"
+          (keydown)="revoveInvalid(validDiscount)" (blur)=" ()" 
           placeholder="Nhập giá Giảm giá" matTooltipClass="material-tooltip">
         <div class="validate-input" *ngIf="!validDiscount.done">
           <p class="validate-input-label" *ngIf="validDiscount.empty">Giảm giá không được bỏ trống</p>
           <p class="validate-input-label" *ngIf="validDiscount.maxLength">Giảm giá không được nhập quá 50 ký tự</p>
           <p class="validate-input-label" *ngIf="validDiscount.format">Giảm giá không đúng định dạng</p>
         </div>
+      </div> -->
+      <div class="col-md-6">
+        <label class="input-label"> Giảm giá</label>
+        <input type="number" class="input-typing overflow-dot"  
+          min="0"
+          max="100"
+          [(ngModel)]="body.discount"
+          placeholder="Nhập giá Giảm giá" matTooltipClass="material-tooltip">
       </div>
 
       <div class="col-md-6">
@@ -125,6 +142,44 @@
           *ngIf="messagerListTypeColor" >
           Chọn Color sản phẩm áp dụng không được để trống
         </span>
+      </div>
+
+      <div class="col-md-6">
+        <label >Thể loại <span>*</span></label>
+        <ng-select  [items]="listCategory" 
+                    placeholder="Lựa chọn" 
+                    class="input-select" 
+                    bindLabel="name" 
+                    bindValue="id"
+                    [(ngModel)]="body.categoryId" 
+                    [searchable]="false" 
+                    [clearable]="false">
+        </ng-select>
+      </div>
+      <div class="col-md-6">
+        <label>Nhãn hàng <span>*</span></label>
+        <ng-select  [items]="listBrand" 
+                    placeholder="Lựa chọn" 
+                    class="input-select" 
+                    bindLabel="name" 
+                    bindValue="id"
+                    [(ngModel)]="body.brandId" 
+                    [searchable]="false" 
+                    [clearable]="false">
+        </ng-select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="input-label"> Số lượng <span>*</span></label>
+        <input type="number" class="input-typing overflow-dot"  
+          oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0+/, '');"
+          [(ngModel)]="body.quantity"
+          (keydown)="revoveInvalid(validQuantity)" (blur)="validateQuantity()" 
+          placeholder="Nhập Số lượng" matTooltipClass="material-tooltip">
+        <div class="validate-input" *ngIf="!validQuantity.done">
+          <p class="validate-input-label" *ngIf="validQuantity.empty">Số lượng không được bỏ trống</p>
+          <p class="validate-input-label" *ngIf="validQuantity.format">Số lượng không đúng định dạng</p>
+        </div>
       </div>
 
       <div class="col-md-12">
@@ -219,15 +274,14 @@
       <div class="col-md-12">
         <label class="input-label" style="margin-top: 12px;">Mô tả</label>
         <textarea type="text" 
-                  (blur)="validDescription()"
                   class="textarea-typing" 
                   [(ngModel)]="body.description" 
                   placeholder="Nhập mô tả">
         </textarea>
-        <div class="validate-input" *ngIf="!validDescriptions.done">
+        <!-- <div class="validate-input" *ngIf="!validDescriptions.done">
           <p class="validate-input-label" *ngIf="validDescriptions.empty">Mô tả không được để trống</p>
           <p class="validate-input-label" *ngIf="validDescriptions.maxLength">Mô tả không được nhập quá 1000 ký tự</p>
-        </div> 
+        </div>  -->
 
       </div>
 

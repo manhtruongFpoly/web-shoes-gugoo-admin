@@ -1,0 +1,110 @@
+  
+<div class="modal-content modal-dialog-custom">
+  <div class="modal-header">
+    <h1 class="text-center h3 font-weight-bold">
+      Hóa đơn chi tiết
+    </h1>
+  </div>
+
+  <div class="modal-body" style="padding: 15px;">
+    <table  class="table">
+      <thead>
+        <tr>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Product</th>
+          <!-- <th>image</th> -->
+          <th>Fullname</th>
+          <th>Size</th>
+          <th>Color</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of orderdetail">
+          <td style="color: rgb(202, 5, 68); font-weight: bold;">
+            {{item?.productPrice|currency:'VND'}}
+          </td>
+          <td style="color: rgb(2, 12, 159); font-weight: bold;">
+            {{item?.quantity}}
+          </td>
+          <td >
+            {{item?.productName}}
+          </td>
+          <!-- <td>
+            <img src="{{item.image}}" class="img-fluid" alt="">
+          </td> -->
+          <td >
+            {{item?.username}}
+          </td>
+          <td>
+            {{item?.sizeName}}
+          </td>
+          <td>
+            {{item?.colorName}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-secondary"(click)="closeModal()"> Close</button>
+    <button type="button" *ngIf="dataDialog.status == 'DANGVANCHUYEN'" class="btn btn-primary"   (click)="delivered()" > Đã Giao</button>
+    <button type="button" *ngIf="dataDialog.status == 'DANGXULY'" class="btn btn-primary m-2"  (click)="transporting()" >Đang vận chuyển</button>
+    <button type="button" *ngIf="dataDialog.status == 'DATHANHTOAN'" class="btn btn-primary m-2"  (click)="transporting()" >Đang vận chuyển</button>
+    <button type="button" *ngIf="dataDialog.status == 'CHOXACNHAN'" class="btn btn-primary"  (click)="openEditOrder(dataDialog)" >Sửa đơn</button>
+    <button type="button" *ngIf="dataDialog.status == 'CHOXACNHAN'" class="btn btn-success m-2"  (click)="Confilrm()" >Xác nhận đơn</button>
+    <button type="button" *ngIf="dataDialog.status == 'CHOXACNHAN' || dataDialog.status == 'DANGXULY'" class="btn btn-danger" (click)="cancel(dataDialog.id)">Hủy Đơn</button>
+  </div>
+</div>
+
+<!-- 
+
+<h1 mat-dialog-title class="text-center h3 font-weight-bold">
+  Hóa đơn chi tiết
+</h1>
+<div class="order-detail2">
+    <h5 class="text-danger">
+      <p-table #dt [value]="orderdetail" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th   pSortableColumn="price">Price</th>
+                <th pSortableColumn="quantity">Quantity</th>
+                <th pSortableColumn="productId">Product</th>
+                <th pSortableColumn="image">image</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-orderdetail>
+            <tr>
+              <td style="color: rgb(202, 5, 68); font-weight: bold;">{{orderdetail?.productPrice|currency:'VND'}}</td>
+              <td style="color: rgb(2, 12, 159); font-weight: bold;">{{orderdetail?.quantity}}</td>
+              <td >{{orderdetail?.productName}}</td>
+              <td >     <img src="{{orderdetail.image}}" class="img-fluid" alt=""></td>
+
+              <td >{{orderdetail?.userId.name}}</td>
+                <td>
+
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                In total there are {{orderdetail ? orderdetail?.length : 0 }}
+            </div>
+        </ng-template>
+
+      </p-table>
+    </h5>
+
+  </div>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button type="button" *ngIf="dataDialog.status == 'DANGVANCHUYEN'" class="btn btn-primary"   (click)="delivered()" > Đã Giao</button>
+    <button type="button" *ngIf="dataDialog.status == 'DANGXULY'" class="btn btn-primary m-2"  (click)="transporting()" >Đang vận chuyển</button>
+    <button type="button" *ngIf="dataDialog.status == 'CHOXACNHAN'" class="btn btn-primary"  (click)="openEditOrder(dataDialog)" >Sửa đơn</button>
+    <button type="button" *ngIf="dataDialog.status == 'CHOXACNHAN'" class="btn btn-success m-2"  (click)="Confilrm()" >Xác nhận đơn</button>
+
+    <button type="button" *ngIf="dataDialog.status == 'CHOXACNHAN' || dataDialog.status == 'DANGXULY'" class="btn btn-danger" (click)="cancel(dataDialog.id)">Hủy Đơn</button>
+</div> -->

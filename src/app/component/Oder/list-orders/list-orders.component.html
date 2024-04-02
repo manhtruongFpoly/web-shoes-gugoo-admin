@@ -1,0 +1,260 @@
+<div id="categoryAdd" class="mt-5">
+  <div class="row">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-3">
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Tất cả</option>
+              <option value="0">Chờ Xác Nhận</option>
+              <option value="1">Đang Sử Lý</option>
+              <option value="2">Đang Vận Chuyển</option>
+              <option value="3">Đã Giao</option>
+              <option value="3">Đã Hủy</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Create Date </th>
+            <th>Discount </th>
+            <th>Grand Total </th>
+
+            <th><button class="btn btn-success p-1">Chờ Xác Nhận</button></th>
+            <th><button  class="btn btn-secondary p-1">Đang Xử Lý</button></th>
+            <th><button  class="btn btn-warning p-1">Đang Vận Chuyển</button> </th>
+            <th><button  class="btn btn-primary p-1">Đã Giao</button></th>
+            <th><button class="btn btn-danger p-1">Đã Hủy</button> </th>
+
+            <th colspan="3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of listOrder">
+            <td>{{order.id}}</td>
+            <td>{{order.createDate | date: "dd/MM/yyyy"}}</td>
+            <td>{{order.discount}}</td>
+            <td>{{order.grandTotal}}</td>
+            <td>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" [checked]="order.status == 'CHOXACNHAN'"
+                 disabled >
+              </div>
+            </td>
+            <td>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" [checked]="order.status == 'DANGXULY'"
+                (click)="confirmUpdateStatus(content, order.id)"
+                  (click)="getOne(order.id)">
+              </div>
+            </td>
+            <td>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" [checked]="order.status == 'DANGVANCHUYEN'"
+                (click)="confirmUpdateCancelledStatus(beingShipped, order.id)">
+              </div>
+            </td>
+            <td>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" [checked]="order.status == 'DAGIAO'"
+                (click)="confirmUpdateDeliveredStatus(delivered, order.id)">
+              </div>
+            </td>
+            <td>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" [checked]="order.status == 'DAHUY'"
+                (click)="confirmUpdateCancelledStatus(cancelled, order.id)"
+                >
+              </div>
+            </td>
+
+            <td>
+              <a [routerLink]="['/info-order/' + order.id]"
+              pButton pRipple icon="pi pi-pencil"
+              class="p-button-rounded p-button-warning"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="card-footer">
+        <!-- <div class="col-md-12">
+          <pagination-controls previousLabel="Prev" nextLabel="Next" [responsive]="true"
+            (pageChange)="handlePageChange($event)">
+          </pagination-controls>
+        </div> -->
+      </div>
+
+    </div>
+
+
+     <!-- xác nhận đơn hàng -->
+    <ng-template #content let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h2 class="modal-title">{{confirmMessage}}</h2>
+        <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="validateFormO">
+      <div class="modal-body">
+        <div class="card bg-secondary">
+          <div class="card-body text-white">
+            <h2 class="text-white">Gọi điện cho khách hàng xác nhận thông tin sau:</h2>
+            <hr />
+            <div >
+              <h2 class="text-white">Tên khách hàng: {{getOneOrder.fullname}}</h2>
+              <h2 class="text-white">Số điện thoại: {{getOneOrder.phone}}</h2>
+              <h2 class="text-white">Địa chỉ mua hàng: </h2>
+              <h2 class="text-white">Hình thức thanh toán: {{getOneOrder.payment_id == 1 ? 'Thanh Toán Khi Nhận Hàng' : 'Chuyển khoản qua ngân hàng'}}</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-secondary mt-2">
+          <div class="card-body">
+            <h2 class="text-white">Sản phẩm mua:</h2>
+            <div *ngFor="let item of orderDetails">
+              <h2  class="name text-white">Tên sản phẩm: {{item.name}}</h2>
+              <h4  class="text-white">Giá sản phảm: {{item.price}}</h4>
+              <h4  class="text-white">Số lượng: {{item.quantity}}</h4>
+              <hr/>
+            </div>
+            <h1 class="text-white">Tổng tiền: {{getOneOrder.grandTotal}}</h1>
+          </div>
+        </div>
+
+        <div class="form-group mb-3 mt-3">
+           <label for="">Nhập Tiền Shipping: </label>
+          <input class="form-control mt-2"
+          formControlName="shipping"
+          [(ngModel)]="shipping"
+          placeholder="Tiền shipping">
+          <!-- <small class="text-danger" *ngIf="validateFormO.controls['shipping'].errors?.['required']">
+             Shipping không được để trống</small> -->
+        </div>
+
+        <div class="form-check mt-3">
+          <input class="form-check-input"
+          type="checkbox" formControlName="check" value="" id="flexCheckChecked" >
+          <label class="form-check-label" for="flexCheckChecked">
+            Đã xác nhận đơn hàng
+          </label>
+        </div>
+
+      </div>
+    </form>
+      <div class="modal-footer">
+        <button [disabled]="validateFormO.invalid"
+        class="btn btn-success" (click)="confirmOrder()"
+        (click)="c('Close click')">Confirm</button>
+        <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+      </div>
+
+    </ng-template>
+     <!-- xác nhận đơn hàng -->
+
+    <!-- Hủy đơn hàng -->
+    <ng-template #cancelled let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h1 class="modal-title">{{confirmMessage}}</h1>
+        <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="validFormCancelled">
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body bg-danger">
+            <div class="form-group"></div>
+            <label class="text-white"> Lý Do Hủy Đơn Hàng </label>
+                  <textarea class="form-control"
+                   formControlName="reason"
+                   [(ngModel)]="reason"></textarea>
+                  <!-- <div *ngIf="validFormCancelled.controls['reason'].invalid && validFormCancelled.controls['reason'].touched"
+                    class="text-danger">
+                    <small *ngIf="validFormCancelled.controls['reason'].errors?.['required']"> Lý do hủy đơn hàng không được để
+                      trống
+                    </small>
+                    <small *ngIf="validFormCancelled.controls['reason'].hasError('minlength')"> Lý do hủy đơn hàng phải lớn hơn
+                      hoặc bằng 6 ký
+                      tự</small>
+                    <small *ngIf="validFormCancelled.controls['reason'].hasError('maxlength')"> Lý do hủy đơn hàng phải nhỏ hơn
+                      hoặc bằng 200 ký
+                      tự</small>
+                  </div> -->
+          </div>
+        </div>
+      </div>
+    </form>
+      <div class="modal-footer">
+        <button class="btn btn-success" [disabled]="validFormCancelled.invalid"
+        (click)="c('Close click')" (click)="confirmCancelled()">Confirm</button>
+        <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancel</button>
+      </div>
+
+    </ng-template>
+    <!-- Hủy đơn hàng -->
+
+    <!-- Đang vận chuyển -->
+    <ng-template #beingShipped let-c="close" let-d="dismiss">
+      <div class="modal-header">
+        <h1 class="modal-title">{{confirmMessage}}</h1>
+        <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body bg-warning">
+            <h2 class="text-white">Xác nhận đơn hàng để vận chuyển:</h2>
+            <hr />
+            <div class="form-group">
+              <label for="">Ngày nhận hàng</label>
+              <input type="date" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success"
+         (click)="confirmBeingShipper()" (click)="c('Close click')" type="submit">Confirm</button>
+        <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancel</button>
+      </div>
+    </ng-template>
+ <!-- Đang vận chuyển -->
+
+  <!-- Đã giao -->
+  <ng-template #delivered let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h1 class="modal-title">{{confirmMessage}}</h1>
+      <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="card">
+        <div class="card-body bg-primary">
+          <h2 class="text-white">Đơn hàng đã được giao:</h2>
+          <hr />
+          <div class="form-group">
+           <h1 class="text-white">Tiền đã về tay</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success" (click)="confirmDelivered()" (click)="c('Close click')" type="submit">Confirm</button>
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancel</button>
+    </div>
+  </ng-template>
+
+ <!-- Đã giao -->
+
+  </div>
+</div>

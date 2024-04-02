@@ -8,17 +8,18 @@ import { CategoryService } from '../../../_service/category-service/category.ser
 import { OrderService } from '../../../_service/order-service/order.service';
 import { GhnService } from '../../../_service/ghn-service/ghn.service';
 import { ExportOrderServiceService } from '../../../_service/export-service/export-order-service.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { TokenStorageService } from '../../../_service/token-storage-service/token-storage.service';
 import { CartService } from 'src/app/_service/cart.service';
 import { ProductService } from 'src/app/_service/product-service/product.service';
 import { ToastrService } from 'ngx-toastr';
 import { ValidateInput } from 'src/app/_model/validate-input.model';
+import { ModalSearchListProductComponent } from './modal-search-list-product/modal-search-list-product.component';
 
 @Component({
   selector: 'app-buy-offline',
   templateUrl: './buy-offline.component.html',
-  styleUrls: ['./buy-offline.component.css']
+  styleUrls: ['./buy-offline.component.scss']
 })
 export class BuyOfflineComponent implements OnInit {
 
@@ -114,6 +115,7 @@ export class BuyOfflineComponent implements OnInit {
   validDistrict:ValidateInput = new ValidateInput();
   validWard:ValidateInput = new ValidateInput();
 
+  isDeliveryOrder: boolean = false;
 
   constructor(
 
@@ -127,10 +129,14 @@ export class BuyOfflineComponent implements OnInit {
     // private restImages: ImageApiService,
     private restExport: ExportOrderServiceService,
     private tokenStorageService: TokenStorageService,
-    private changeDetechtorRef: ChangeDetectorRef
-  ) { }
+    private changeDetechtorRef: ChangeDetectorRef,
+    private matDialog: MatDialog,
+  ) {
+   }
 
   ngOnInit() {
+
+    this.getOrderDetails();
 
     // this.getAllProduct();
     // this.getAll();
@@ -174,6 +180,21 @@ export class BuyOfflineComponent implements OnInit {
     // })
   }
 
+  setDeliveryOrder(type){
+    if(type == 0){
+      this.isDeliveryOrder = false;
+      return;
+    }
+    if(type == 1){
+      this.isDeliveryOrder = true;
+      return;
+    }
+    if(type == 2){
+      this.isDeliveryOrder = false;
+      return;
+    }
+  }
+
   // phần api giao hang nhanh
 
   getShipping(districtId: any) {
@@ -184,18 +205,15 @@ export class BuyOfflineComponent implements OnInit {
     }
 
     this.restGhn.getService(data).subscribe(res => {
-      if (res.data.length <= 1) {
-        this.serviceId = res.data[0].service_id;
-      } else {
-        this.serviceId = res.data[1].service_id;
-      }
+      this.serviceId = res.data[0].service_id;
 
       const shippingOrder = {
         "service_id": this.serviceId,
         "insurance_value": this.totalAmount,
         "from_district_id": 3440,
         "to_district_id": data.to_district,
-        "weight": 20
+        "to_ward_code": this.wardCode,
+        "weight": 1000
       }
 
       this.restGhn.getShipping(shippingOrder).subscribe(res => {
@@ -215,18 +233,10 @@ export class BuyOfflineComponent implements OnInit {
     })
   }
 
-  // getDistrict(provinceId: any, provinceName: any) {
-  //   this.restGhn.getDistrict(provinceId).subscribe((res: any) => {
-  //     this.district = res.data;
-  //   })
-  //   this.provinceName = provinceName;
-  //   this.provinceId = provinceId;
-  //   console.log(this.provinceName + "test provinceName");
-  // }
-
   getDistrict(event) {
     console.log(event);
     this.provinceName = event.ProvinceName;
+    this.orderAt.province = this.provinceName;
     this.restGhn.getDistrict(event.ProvinceID).subscribe(response => {
       this.district = response.data;
       console.log(response.data);
@@ -234,21 +244,12 @@ export class BuyOfflineComponent implements OnInit {
     this.provinceId = event.ProvinceID;
   }
 
-
-  // getWard(districtId: any, districtName: any) {
-  //   this.getShipping(districtId);
-  //   this.restGhn.getWard(districtId).subscribe((res: any) => {
-  //     this.ward = res.data;
-  //   })
-  //   this.districtName = districtName;
-  //   console.log(this.districtName + "test districtName")
-  // }
-
   districtID:any;
   wardCode;
   getWard(event) {
     console.log(event);
-    this.provinceName = event.DistrictName;
+    this.districtName = event.DistrictName;
+    this.orderAt.district = event.DistrictName;
     this.districtID = event.DistrictID;
     this.restGhn.getWard(event.DistrictID).subscribe(response => {
       this.ward = response.data;
@@ -259,16 +260,17 @@ export class BuyOfflineComponent implements OnInit {
   selectWard(event){
     this.wardName = event.WardName
     this.wardCode = event.WardCode
+    this.orderAt.ward = event.WardName
     console.log(this.districtID);
     this.getShipping(this.districtID);
     this.addressName = this.wardName + ', ' + this.districtName + ', ' + this.provinceName;
     console.log(this.addressName);
   }
 
-  getWardName(wardName: any) {
-    this.wardName = wardName;
-    this.addressName = this.wardName + ', ' + this.districtName + ', ' + this.provinceName;
-  }
+  // getWardName(wardName: any) {
+  //   this.wardName = wardName;
+  //   this.addressName = this.wardName + ', ' + this.districtName + ', ' + this.provinceName;
+  // }
   // phần api giao hang nhanh
 
   //phần hóa đơn.
@@ -389,13 +391,13 @@ export class BuyOfflineComponent implements OnInit {
   //   this.getAllPaymentStatusPaid();
   // }
 
-  confirmAddProduct(confirmDialog: TemplateRef<any>) {
-    this.modalService.open(confirmDialog,
-      { ariaDescribedBy: 'modal-basic-title' }).result.then((result) => {
-      }).catch((err) => {
+  // confirmAddProduct(confirmDialog: TemplateRef<any>) {
+  //   this.modalService.open(confirmDialog,
+  //     { ariaDescribedBy: 'modal-basic-title' }).result.then((result) => {
+  //     }).catch((err) => {
 
-      })
-  }
+  //     })
+  // }
 
   clickReset() {
     this.doing = false;
@@ -411,6 +413,7 @@ export class BuyOfflineComponent implements OnInit {
       this.doing = true;
       this.isLoading = false;
       this.idOrder = res.data.id;
+      this.shippingTotal = res.data.shipping;
       console.log(res.data.id + "id order");
 
       this.tokenStorageService.set('id_order', res.data.id)
@@ -426,10 +429,13 @@ export class BuyOfflineComponent implements OnInit {
       this.restOrder.getOneOrderDetail(res.data.id).subscribe(res => {
         this.orderDetails = res.data;
       })
-
-
-
     })
+  }
+
+  validateNameSection: boolean[] = [];
+  clickIndexButton(index){
+    this.validateNameSection.fill(false);
+    this.validateNameSection[index] = true;
   }
 
 
@@ -495,12 +501,7 @@ export class BuyOfflineComponent implements OnInit {
       this.restExport.exportOrder(this.idOrder).subscribe(response =>{
         console.log("export order success");
       })
-
-      window.open('http://localhost:8080/api/v1/export/order/' + this.idOrder);
-
-      window.location.reload();
-
-
+     this.ngOnInit();
     }, error => {
       console.log(error + 'hah');
       if (error.success == false) {
@@ -557,6 +558,10 @@ export class BuyOfflineComponent implements OnInit {
   updateAtTheCounter() {
     this.delivery.address = this.addressName;
     this.isLoading = true;
+
+    console.log(this.orderAt);
+    console.log(this.delivery.id);
+
     this.restOrder.updateOrderAtTheCounter(this.delivery.id, this.orderAt).subscribe(res => {
       this.isLoading = false;
       this.toast.success('Cập Nhật thành công');
@@ -573,14 +578,29 @@ export class BuyOfflineComponent implements OnInit {
   // phần sản phẩm đặt
 
 
-  createOrderDetail() {
+  createOrderDetail(itemProduct) {
     this.isLoading = true;
-    console.log(this.tokenStorageService.get('id_pro'));
 
-    this.restOrder.createOrderDetail(this.delivery.id, this.tokenStorageService.get('id_pro')).subscribe((res: any) => {
+    this.validateAddTocart();
+    if(this.checkValidateColor){
+      return
+    }
+    if(this.checkValidateSize){
+      return
+    }
+
+    console.log(this.tokenStorageService.get('id_pro'));
+    const data = {
+      idOrder: this.delivery.id,
+      id: itemProduct.id,
+      sizeName: this.selectSizeName,
+      colorName: this.selectColorName
+    }
+
+    // this.restOrder.createOrderDetail(this.delivery.id, this.tokenStorageService.get('id_pro')).subscribe((res: any) => {
+    this.restOrder.createOrderDetail(data).subscribe((res: any) => {
       this.isLoading = false;
       this.toast.success('Thêm sản phẩm thành công');
-
       this.getOrderDetails();
       this.sumPriceOrderDetail();
       this.resetFilterByCode = '';
@@ -591,6 +611,21 @@ export class BuyOfflineComponent implements OnInit {
       this.isLoading = false;
       this.resetFilterByCode = '';
     });
+  }
+
+  checkValidateSize = false;
+  checkValidateColor = false;
+  validateAddTocart(){
+    console.log(this.selectColorName);
+    if(this.selectColorName === null || this.selectColorName === undefined){
+      this.toast.warning('Bạn chưa chọn màu cho sản phẩm',);
+      this.checkValidateColor = true;
+    }
+
+    if(this.selectSizeName == null || this.selectSizeName == undefined){
+      this.toast.warning('Bạn chưa chọn size sản phẩm',);
+      this.checkValidateSize = true;
+    }
   }
 
   deleteOrderDetail(idO: any) {
@@ -924,8 +959,29 @@ export class BuyOfflineComponent implements OnInit {
     }
   }
 
+  modalSearchListProduct(item){
+    const data = {
+      data: item,
+      idOrder: this.delivery.id
+    }
+    this.matDialog.open(ModalSearchListProductComponent, {
+      data: data,
+      disableClose: false,
+      hasBackdrop: true,
+      width: '850px',
+      maxHeight: '80vh',
+      autoFocus: false,
+      panelClass: 'view-detail-prompt'
+    }).afterClosed().subscribe((res) => {
+      this.sumPriceOrderDetail();
+      this.getOrderDetails();
+    });
+  }
+
   // tìm kiếm theo mã code sản phẩm
   rowData;
+  listSize:number[] = [];
+  listColor:string[] = [];
   filterByCodeProduct(page) {
     const data = {
       data: {
@@ -935,12 +991,32 @@ export class BuyOfflineComponent implements OnInit {
       pageSize: this.pageSize
       
     }
+    this.doing = false;
     this.restProduct.searchProduct(data).subscribe((res:any)=>{
 
-      this.rowData = res?.data?.content;
+      if(res?.data){
+        this.rowData = res?.data?.content;
+        this.doing = true;
+        this.isDoing = true;
+        this.listColor = JSON.parse(this.rowData[0].listColors);
+        console.log(this.listColor);
 
-      this.changeDetechtorRef.detectChanges();
+        this.listSize = JSON.parse(this.rowData[0].listSizes);
+        console.log(this.listSize);
+
+        if(this.rowData){
+          this.modalSearchListProduct(this.rowData);
+        }
+
+
+      }else{
+        this.doing = false;
+        this.isDoing = false;
+        this.toast.error('Không tìm thấy sản phẩm!');
+      }
+      console.log(this.rowData);
     })
+    
 
     // let condition = e.target.value;
     // this.doing = false;
@@ -950,7 +1026,7 @@ export class BuyOfflineComponent implements OnInit {
     //       this.doing = false;
     //       this.toast.error({ summary: 'Không tìm thấy sản phẩm!' });
     //       this.resetFilterByCode = '';
-    //     } else {
+    //     } else {sumPriceOrderDetail
     //       this.doing = true;
     //       this.productIamges = data.data;
     //       console.log(data.data.price_new + "product_image");
@@ -963,6 +1039,20 @@ export class BuyOfflineComponent implements OnInit {
     //       this.toast.error({ summary: 'Không tìm thấy sản phẩm!' })
     //     });
     // }
+  }
+
+  selectedSize;
+  selectSizeName: string;
+  selectSize(item) {
+    this.selectedSize = item.key;
+    this.selectSizeName = item.value;
+  }
+
+  selectedColor;
+  selectColorName: string;
+  selectColor(item) {
+    this.selectedColor = item.key;
+    this.selectColorName = item.value;
   }
 
 }

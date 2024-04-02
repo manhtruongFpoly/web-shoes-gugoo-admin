@@ -52,7 +52,14 @@ export class ProductService {
     formData.append('code', body.data.code);
     formData.append('name', body.data.name);
     formData.append('price', body.data.price);
-    formData.append('discount', body.data.discount);
+
+    if(body.data.discount){
+      formData.append('discount', body.data.discount);
+    }
+
+    formData.append('categoryId', body.data.categoryId);
+    formData.append('brandId', body.data.brandId);
+    formData.append('quantity', body.data.quantity);
 
     if (body.data.description != null) {
       formData.append('description', body.data.description);

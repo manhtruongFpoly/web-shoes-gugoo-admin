@@ -1,0 +1,697 @@
+<div id="order">
+  <!-- <div *ngIf="isLoading" class="loading">
+    <div class="spinner-border text-primary spinner-center" role="status">
+    </div>
+  </div> -->
+    <!-- <div class="row">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-3">
+            <div class="col">
+              <select
+                class="form-select"
+                (change)="filter($event)"
+                formControlName="status"
+              >
+              <option selected>Tất cả</option>
+              <option value="CHOXACNHAN">Chờ Xác Nhận</option>
+              <option value="DANGXULY">Đang Xử Lý</option>
+              <option value="DANGVANCHUYEN">Đang Vận Chuyển</option>
+              <option value="DAGIAO">Đã Giao</option>
+              <option value="DAHUY">Đã Hủy</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="row">
+      <form [formGroup]="formSearch">
+        <mat-form-field appearance="standard">
+          <mat-label>Tìm mã hóa đơn</mat-label>
+          <input formControlName="mahd" matInput>
+        </mat-form-field>
+        <button style="margin-left: 19px;" (click)="searchMaHD()" class="btn btn-primary">Tìm kiếm</button>
+      </form>
+    </div>
+    <!-- <mat-stepper #stepper> -->
+      <mat-step [stepControl]="firstFormGroup" >
+        <ng-template matStepLabel>
+          <div (click)="getAll_choxacnhan(); setStepIndex('CHOXACNHAN')">   <a > Chờ Xác Nhận</a></div>
+
+        </ng-template>
+        <!-- <p-table #dt [value]="order" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"> -->
+
+        <ng-template pTemplate="header">
+            <tr>
+
+                <th pSortableColumn="shipping">Mã đơn</th>
+                <th pSortableColumn="shipping">Người nhận</th>
+                <th pSortableColumn="phone">Số Điện Thoại</th>
+                <th pSortableColumn="createDate">Địa chỉ</th>
+                <th pSortableColumn="createDate">Phí ship</th>
+                <th pSortableColumn="status">Trạng thái</th>
+                <th pSortableColumn="description">Mô tả</th>
+                <th pSortableColumn="grandTotal">Giá trị</th>
+
+
+                <th>Thao tác</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-order>
+            <tr >
+              <td>{{order?.mahd}}</td>
+              <td>{{order?.fullname}}</td>
+              <td>{{order?.phone}}</td>
+              <td >{{order?.address}}</td>
+              <td >{{order?.shipping}}</td>
+              <td style="font-weight:bold ; color: rgb(69, 188, 4);">{{order?.status}}</td>
+              <td >{{order?.description}}</td>
+              <td >{{order?.grandTotal| currency:'VND':'symbol':'0.0-2'}}</td>
+
+                 <td>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <i class="pi pi-ellipsis-v"></i>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>
+                    <span (click)="openOrderInfo(order)">Chi tiết đơn</span>
+                  </button>
+                  <button mat-menu-item>
+                    <span (click)="editOrder(order)">Sửa đơn</span>
+                  </button>
+                  <!-- <button mat-menu-item>
+                    <span (click)="editShipName(order)">Đổi người nhận</span>
+                  </button> -->
+                </mat-menu>
+                    <!-- <button (click)="openOrderInfo(order)" pButton pRipple  class="  mr-2"  ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-detailed" viewBox="0 0 16 16">
+                      <path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5ZM5 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5Z"/>
+                      <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5ZM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5h-13Z"/>
+                    </svg></button> -->
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                In total there are {{order ? order?.length : 0 }}
+            </div>
+        </ng-template>
+
+    <ng-template #content let-c="close" let-d="dismiss">
+          <div class="modal-header">
+            <h4 class="modal-title text-center h3" style="color: rgb(30, 214, 9);">Hóa Đơn Chi Tiết</h4>
+
+            <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5 class="text-danger">
+              <!-- <p-table #dt [value]="orderdetaila" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"> -->
+
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th   pSortableColumn="price">Price</th>
+                        <th pSortableColumn="quantity">Quantity</th>
+                        <th pSortableColumn="productId">Product</th>
+                        <th pSortableColumn="image">image</th>
+
+
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-orderdetaila>
+                    <tr>
+
+                      <td style="color: rgb(202, 5, 68); font-weight: bold;">{{orderdetaila?.price|currency:'VND'}}</td>
+                      <td style="color: rgb(2, 12, 159); font-weight: bold;">{{orderdetaila?.quantity}}</td>
+                      <td >{{orderdetaila?.productId}}</td>
+                      <td >     <img src="{{orderdetaila.image}}" class="img-fluid" alt=""></td>
+
+                      <td >{{orderdetaila?.userId.name}}</td>
+                        <td>
+
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">
+                        In total there are {{orderdetaila ? orderdetaila?.length : 0 }}
+                    </div>
+                </ng-template>
+
+              <!-- </p-table> -->
+
+            </h5>
+          </div>
+          <div class="modal-footer">
+            <button type="button" matStepperNext class="btn btn-success"  (click)="Confilrm()" >Xác nhận đơn</button>
+
+            <button type="button" class="btn btn-danger" (click)="cancel()">Hủy Đơn</button>
+          </div>
+        </ng-template>
+    <!-- </p-table> -->
+
+      </mat-step>
+      <mat-step [stepControl]="secondFormGroup"  >
+        <ng-template matStepLabel>
+          <div (click)="  getAll_DANGXULY(); setStepIndex('DANGXULY')">  <a >  Đang Xử Lý</a></div>
+
+        </ng-template>
+        <!-- <p-table #dt [value]="order1" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"> -->
+
+        <ng-template pTemplate="header">
+            <tr>
+
+                <th pSortableColumn="shipping">Mã đơn</th>
+                <th pSortableColumn="shipping">Người nhận</th>
+                <th pSortableColumn="phone">Số Điện Thoại</th>
+                <th pSortableColumn="createDate">Địa chỉ</th>
+                <th pSortableColumn="createDate">Phí ship</th>
+                <th pSortableColumn="status">Trạng thái</th>
+                <th pSortableColumn="description">Mô tả</th>
+                <th pSortableColumn="grandTotal">Giá trị</th>
+
+
+                <th>Thao tác</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-order1>
+            <tr>
+              <td>{{order1?.mahd}}</td>
+              <td>{{order1?.fullname}}</td>
+              <td>{{order1?.phone}}</td>
+              <td >{{order1?.address}}</td>
+              <td >{{order1?.shipping}}</td>
+              <td style="font-weight:bold ; color: rgb(244, 41, 1);">{{order1?.status}}</td>
+                <td >{{order1?.description}}</td>
+              <td >{{order1?.grandTotal| currency:'VND':'symbol':'0.0-2'}}</td>
+
+                 <td>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <i class="pi pi-ellipsis-v"></i>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>
+                    <span (click)="openOrderInfo(order1)">Chi tiết đơn</span>
+                  </button>
+                  <!-- <button mat-menu-item>
+                    <span (click)="editAddress(order1)">Đổi địa chỉ</span>
+                  </button>
+                  <button mat-menu-item>
+                    <span (click)="editShipName(order1)">Đổi người nhận</span>
+                  </button> -->
+                </mat-menu>
+                    <!-- <button (click)="openOrderInfo(order1)"  pButton pRipple  class="  mr-2"  ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-detailed" viewBox="0 0 16 16">
+                      <path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5ZM5 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5Z"/>
+                      <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5ZM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5h-13Z"/>
+                    </svg></button> -->
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                In total there are {{order1 ? order1?.length : 0 }}
+            </div>
+        </ng-template>
+
+    <ng-template #content2 let-c="close" let-d="dismiss">
+          <div class="modal-header">
+            <h4 class="modal-title " style="color: rgb(30, 214, 9);">OrderDetail</h4>
+            <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5 class="text-danger">
+              <!-- <p-table #dt [value]="orderdetaila1" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"> -->
+
+              <ng-template pTemplate="header">
+                  <tr>
+
+                      <th   pSortableColumn="price">Price</th>
+                      <th pSortableColumn="quantity">Quantity</th>
+                      <th pSortableColumn="productId">Product</th>
+                      <th pSortableColumn="image">image</th>
+
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-orderdetaila1>
+                  <tr>
+
+                    <td style="color: rgb(202, 5, 68); font-weight: bold;">{{orderdetaila1?.price|currency:'VND'}}</td>
+                    <td style="color: rgb(2, 12, 159); font-weight: bold;">{{orderdetaila1?.quantity}}</td>
+                    <td >{{orderdetaila1?.productId}}</td>
+                    <td >     <img src="{{orderdetaila1.image}}" class="img-fluid" alt=""></td>
+
+                    <td >{{orderdetaila1?.userId.name}}</td>
+                      <td>
+
+                      </td>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="summary">
+                  <div class="flex align-items-center justify-content-between">
+                      In total there are {{orderdetaila1 ? orderdetaila1?.length : 0 }}
+                  </div>
+              </ng-template>
+
+          <!-- </p-table> -->
+
+            </h5>
+          </div>
+          <div class="modal-footer">
+
+            <button type="button" matStepperNext class="btn btn-primary"  (click)="transporting()" >Đang vận chuyển</button>
+            <button type="button" class="btn btn-danger" (click)="cancel()">Hủy Đơn</button>
+          </div>
+        </ng-template>
+    <!-- </p-table> -->
+
+      </mat-step>
+
+      <mat-step [stepControl]="fourthFormGroup"  >
+        <ng-template matStepLabel>
+          <div (click)="  getAll_DANGVANCHUYEN(); setStepIndex('DANGVANCHUYEN')">   <a  > Đang Vận Chuyển</a> </div>
+
+        </ng-template>
+        <!-- <p-table #dt [value]="order2" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"> -->
+
+        <ng-template pTemplate="header">
+            <tr>
+
+                <th pSortableColumn="shipping">Mã đơn</th>
+                <th pSortableColumn="shipping">Người nhận</th>
+                <th pSortableColumn="phone">Số Điện Thoại</th>
+                <th pSortableColumn="createDate">Địa chỉ</th>
+                <th pSortableColumn="createDate">Phí ship</th>
+                <th pSortableColumn="status">Trạng thái</th>
+                <th pSortableColumn="description">Mô tả</th>
+                <th pSortableColumn="grandTotal">Giá trị</th>
+
+
+                <th>Thao tác</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-order2>
+            <tr>
+              <td>{{order2?.mahd}}</td>
+              <td>{{order2?.fullname}}</td>
+              <td>{{order2?.phone}}</td>
+              <td >{{order2?.address}}</td>
+              <td >{{order2?.shipping}}</td>
+              <td style="font-weight:bold ; color: rgb(247, 113, 2);">{{order2?.status}}</td>
+              <td >{{order2?.description}}</td>
+              <td >{{order2?.grandTotal| currency:'VND':'symbol':'0.0-2'}}</td>
+
+                 <td>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <i class="pi pi-ellipsis-v"></i>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>
+                    <span (click)="openOrderInfo(order2)">Chi tiết đơn</span>
+                  </button>
+                  <!-- <button mat-menu-item>
+                    <span (click)="editAddress(order2)">Đổi địa chỉ</span>
+                  </button>
+                  <button mat-menu-item>
+                    <span (click)="editShipName(order2)">Đổi người nhận</span>
+                  </button> -->
+                </mat-menu>
+                    <!-- <button (click)="openOrderInfo(order2)" pButton pRipple  class="  mr-2"  ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-detailed" viewBox="0 0 16 16">
+                      <path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5ZM5 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5Z"/>
+                      <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5ZM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5h-13Z"/>
+                    </svg></button> -->
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                In total there are {{order2 ? order2?.length : 0 }}
+            </div>
+        </ng-template>
+        <ng-template #content4 let-c="close" let-d="dismiss">
+          <div class="modal-header">
+            <h4 class="modal-title " style="color: rgb(30, 214, 9);">OrderDetail</h4>
+            <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+              <form [formGroup]="validFormCancelled">
+              <div class="modal-body">
+                <div class="card">
+                  <div class="card-body bg-success">
+                    <div class="form-group"></div>
+                    <label class="text-white"> Lý Do Hủy Đơn Hàng 2</label>
+                          <textarea class="form-control"
+                           formControlName="reason"
+                           [(ngModel)]="reason"></textarea>
+                          <!-- <div *ngIf="validFormCancelled.controls['reason'].invalid && validFormCancelled.controls['reason'].touched"
+                            class="text-danger">
+                            <small *ngIf="validFormCancelled.controls['reason'].errors?.['required']"> Lý do hủy đơn hàng không được để
+                              trống
+                            </small>
+                            <small *ngIf="validFormCancelled.controls['reason'].hasError('minlength')"> Lý do hủy đơn hàng phải lớn hơn
+                              hoặc bằng 6 ký
+                              tự</small>
+                            <small *ngIf="validFormCancelled.controls['reason'].hasError('maxlength')"> Lý do hủy đơn hàng phải nhỏ hơn
+                              hoặc bằng 200 ký
+                              tự</small>
+                          </div> -->
+                  </div>
+                </div>
+              </div>
+            </form>
+
+
+
+          </div>
+          <div class="modal-footer">
+
+
+            <div class="modal-footer">
+              <button class="btn btn-success"
+               (click)="confirmCancelled()">Confirm</button>
+              <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancel</button>
+            </div>
+          </div>
+        </ng-template>
+     <ng-template #content3 let-c="close" let-d="dismiss">
+          <div class="modal-header">
+            <h4 class="modal-title " style="color: rgb(30, 214, 9);">OrderDetail</h4>
+            <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5 class="text-danger">
+              <!-- <p-table #dt [value]="orderdetaila" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"> -->
+
+              <ng-template pTemplate="header">
+                  <tr>
+
+                      <th   pSortableColumn="price">Price</th>
+                      <th pSortableColumn="quantity">Quantity</th>
+                      <th pSortableColumn="productId">productId</th>
+
+                      <th pSortableColumn="image">image</th>
+
+
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-orderdetaila>
+                  <tr>
+
+                    <td>{{orderdetaila?.price}}</td>
+                    <td >{{orderdetaila?.quantity}}</td>
+                    <td >{{orderdetaila?.productId}}</td>
+                    <td >{{orderdetaila?.orderId}}</td>
+                    <td >{{orderdetaila?.userId}}</td>
+                      <td>
+
+                      </td>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="summary">
+                  <div class="flex align-items-center justify-content-between">
+                      In total there are {{orderdetaila ? orderdetaila?.length : 0 }}
+                  </div>
+              </ng-template>
+
+          <!-- </p-table> -->
+
+            </h5>
+          </div>
+          <div class="modal-footer">
+
+            <button type="button" matStepperNext class="btn btn-primary"   (click)="delivered()" > Đã Giao</button>
+            <button type="button" class="btn btn-danger" (click)="cancel()">Hủy Đơn</button>
+          </div>
+        </ng-template>
+    <!-- </p-table> -->
+      </mat-step>
+      <mat-step [stepControl]="fifthFormGroup"  >
+        <ng-template matStepLabel>
+          <div (click)=" getAll_DAGIAO(); setStepIndex('DAGIAO')"><a  >    Đã Giao</a></div>
+
+        </ng-template>
+        <!-- <p-table #dt [value]="order3" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"> -->
+
+        <ng-template pTemplate="header">
+            <tr>
+
+                <th pSortableColumn="shipping">Mã đơn</th>
+                <th pSortableColumn="shipping">Người nhận</th>
+                <th pSortableColumn="phone">Số Điện Thoại</th>
+                <th pSortableColumn="createDate">Địa chỉ</th>
+                <th pSortableColumn="createDate">Phí ship</th>
+                <th pSortableColumn="status">Trạng thái</th>
+                <th pSortableColumn="description">Mô tả</th>
+                <th pSortableColumn="grandTotal">Giá trị</th>
+
+
+                <th>Thao tác</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-order3>
+            <tr>
+
+              <td>{{order3?.mahd}}</td>
+              <td>{{order3?.fullname}}</td>
+              <td>{{order3?.phone}}</td>
+              <td >{{order3?.address}}</td>
+              <td >{{order3?.shipping}}</td>
+              <td style="font-weight:bold ; color: rgb(5, 50, 129);">{{order3?.status}}</td>
+              <td >{{order3?.description}}</td>
+              <td >{{order3?.grandTotal| currency:'VND':'symbol':'0.0-2'}}</td>
+
+                 <td>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <i class="pi pi-ellipsis-v"></i>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>
+                    <span (click)="openOrderInfo(order3)">Chi tiết đơn</span>
+                  </button>
+                  <!-- <button mat-menu-item>
+                    <span (click)="editAddress(order3)">Đổi địa chỉ</span>
+                  </button>
+                  <button mat-menu-item>
+                    <span (click)="editShipName(order3)">Đổi người nhận</span>
+                  </button> -->
+                </mat-menu>
+                    <!-- <button (click)="openOrderInfo(order3)"  pButton pRipple  class="  mr-2"  ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-detailed" viewBox="0 0 16 16">
+                      <path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5ZM5 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5Z"/>
+                      <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5ZM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5h-13Z"/>
+                    </svg></button> -->
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                In total there are {{order ? order?.length : 0 }}
+            </div>
+        </ng-template>
+
+    <!-- <ng-template #content let-c="close" let-d="dismiss">
+          <div class="modal-header">
+            <h4 class="modal-title " style="color: rgb(30, 214, 9);">OrderDetail</h4>
+            <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5 class="text-danger">
+              <p-table #dt [value]="orderdetaila" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+
+              <ng-template pTemplate="header">
+                  <tr>
+
+                      <th   pSortableColumn="price">Price</th>
+                      <th pSortableColumn="quantity">Quantity</th>
+                      <th pSortableColumn="productId">productId</th>
+                      <th pSortableColumn="orderId">orderId</th>
+                      <th pSortableColumn="userId">userId</th>
+
+                      <th>Thao tác</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-orderdetaila>
+                  <tr>
+
+                    <td>{{orderdetaila?.price}}</td>
+                    <td >{{orderdetaila?.quantity}}</td>
+                    <td >{{orderdetaila?.productId}}</td>
+                    <td >{{orderdetaila?.orderId}}</td>
+                    <td >{{orderdetaila?.userId}}</td>
+                      <td>
+
+                      </td>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="summary">
+                  <div class="flex align-items-center justify-content-between">
+                      In total there are {{orderdetaila ? orderdetaila?.length : 0 }}
+                  </div>
+              </ng-template>
+
+          </p-table>
+
+            </h5>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" [disabled]="order_status.status!= 'CHOXACNHAN'"  (click)="Confilrm(order_status.id)" >Xác nhận đơn</button>
+            <button type="button" class="btn btn-primary" [disabled]="order_status.status!= 'DANGSULY'"  (click)="transporting(order_status.id)" >Đang vận chuyển</button>
+            <button type="button" class="btn btn-danger" (click)="cancel(order_status.id)">Hủy Đơn</button>
+          </div>
+        </ng-template> -->
+    <!-- </p-table> -->
+      </mat-step>
+      <mat-step [stepControl]="sixthFormGroup"  >
+
+          <ng-template matStepLabel>
+            <a  (click)="getAll_DAHUY(); setStepIndex('DAHUY')" >   Đã Hủy  </a>
+          </ng-template>
+          <!-- <p-table #dt [value]="order4" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+ -->
+        <ng-template pTemplate="header">
+            <tr>
+
+                <th pSortableColumn="shipping">Mã đơn</th>
+                <th pSortableColumn="shipping">Người nhận</th>
+                <th pSortableColumn="phone">Số Điện Thoại</th>
+                <th pSortableColumn="createDate">Địa chỉ</th>
+                <th pSortableColumn="createDate">Phí ship</th>
+                <th pSortableColumn="status">Trạng thái</th>
+                <th pSortableColumn="description">Mô tả</th>
+                <th pSortableColumn="reason">Lý Do Hủy</th>
+                <th pSortableColumn="grandTotal">Giá trị</th>
+
+
+                <th>Thao tác</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-order4>
+            <tr>
+
+              <td>{{order4?.mahd}}</td>
+              <td>{{order4?.fullname}}</td>
+              <td>{{order4?.phone}}</td>
+              <td >{{order4?.address}}</td>
+              <td >{{order4?.shipping}}</td>
+              <td style="font-weight:bold ; color: rgb(188, 4, 4);">{{order4?.status}}</td>
+              <td >{{order4?.description}}</td>
+              <td  >{{order4?.reason}}</td>
+              <td style="font-weight:bold ; color: rgb(188, 4, 4);" >{{order4?.grandTotal| currency:'VND':'symbol':'0.0-2'}}</td>
+
+                 <td>
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <i class="pi pi-ellipsis-v"></i>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>
+                    <span (click)="openOrderInfo(order4)">Chi tiết đơn</span>
+                  </button>
+                  <!-- <button mat-menu-item>
+                    <span (click)="editAddress(order4)">Đổi địa chỉ</span>
+                  </button>
+                  <button mat-menu-item>
+                    <span (click)="editShipName(order4)">Đổi người nhận</span>
+                  </button> -->
+                </mat-menu>
+                    <!-- <button  (click)="openOrderInfo(order4)" pButton pRipple  class="  mr-2"  ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ticket-detailed" viewBox="0 0 16 16">
+                      <path d="M4 5.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5Zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5ZM5 7a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5Z"/>
+                      <path d="M0 4.5A1.5 1.5 0 0 1 1.5 3h13A1.5 1.5 0 0 1 16 4.5V6a.5.5 0 0 1-.5.5 1.5 1.5 0 0 0 0 3 .5.5 0 0 1 .5.5v1.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 11.5V10a.5.5 0 0 1 .5-.5 1.5 1.5 0 1 0 0-3A.5.5 0 0 1 0 6V4.5ZM1.5 4a.5.5 0 0 0-.5.5v1.05a2.5 2.5 0 0 1 0 4.9v1.05a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-1.05a2.5 2.5 0 0 1 0-4.9V4.5a.5.5 0 0 0-.5-.5h-13Z"/>
+                    </svg></button> -->
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                In total there are {{order4 ? order4?.length : 0 }}
+            </div>
+        </ng-template>
+
+    <!-- <ng-template #content let-c="close" let-d="dismiss">
+          <div class="modal-header">
+            <h4 class="modal-title " style="color: rgb(30, 214, 9);">OrderDetail</h4>
+            <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5 class="text-danger">
+              <p-table #dt [value]="orderdetaila" [rows]="5" [paginator]="true"  responsiveLayout="scroll" [rowHover]="true"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+
+              <ng-template pTemplate="header">
+                  <tr>
+
+                      <th   pSortableColumn="price">Price</th>
+                      <th pSortableColumn="quantity">Quantity</th>
+                      <th pSortableColumn="productId">productId</th>
+                      <th pSortableColumn="orderId">orderId</th>
+                      <th pSortableColumn="userId">userId</th>
+
+                      <th>Thao tác</th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-orderdetaila>
+                  <tr>
+
+                    <td>{{orderdetaila?.price}}</td>
+                    <td >{{orderdetaila?.quantity}}</td>
+                    <td >{{orderdetaila?.productId}}</td>
+                    <td >{{orderdetaila?.orderId}}</td>
+                    <td >{{orderdetaila?.userId}}</td>
+                      <td>
+
+                      </td>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="summary">
+                  <div class="flex align-items-center justify-content-between">
+                      In total there are {{orderdetaila ? orderdetaila?.length : 0 }}
+                  </div>
+              </ng-template>
+
+          </p-table>
+
+            </h5>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" [disabled]="order_status.status!= 'CHOXACNHAN'"  (click)="Confilrm(order_status.id)" >Xác nhận đơn</button>
+            <button type="button" class="btn btn-primary" [disabled]="order_status.status!= 'DANGSULY'"  (click)="transporting(order_status.id)" >Đang vận chuyển</button>
+            <button type="button" class="btn btn-danger" (click)="cancel(order_status.id)">Hủy Đơn</button>
+          </div>
+        </ng-template> -->
+    <!-- </p-table> -->
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p>You are now done.</p>
+        <div>
+          <button mat-button matStepperPrevious class="btn btn-success">Back</button>
+          <!-- <button mat-button (click)="stepper.reset()" class="btn btn-primary">Reset</button> -->
+
+        </div>
+      </mat-step>
+    <!-- </mat-stepper> -->
+
+
+</div>
+
+

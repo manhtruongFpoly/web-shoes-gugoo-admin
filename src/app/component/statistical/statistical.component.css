@@ -1,0 +1,25 @@
+#divChart{
+  display: block;
+  /* width: 85%; */
+  /* height: 400px; */
+}
+table {
+  width: 100%;
+}
+.thongke{
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #4CAF50;
+}
+.card-icon .pi{
+  font-size: 2rem !important;
+}
+.card-icon{
+  text-align: center;
+}
+.card-category{
+  font-size: 18px;
+  font-weight: bold;
+}

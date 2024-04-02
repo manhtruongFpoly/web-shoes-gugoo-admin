@@ -44,9 +44,10 @@ export class LoginComponent implements OnInit {
 
     this.auth.login(this.user).subscribe((data) => {
       if (data.success) {
-        // if (data.data.role !== 'ADMIN') {
-        //   this.toastr.error('Tài khoản không có quyền truy cập');
-        // } else {
+        if (data.data.role[0].authority !== 'ADMIN') {
+          this.toastr.error('Tài khoản không có quyền truy cập');
+          return;
+        } else {
           console.log(data.data);
 
           this.tokenStorage.saveToken(data.data.token);
@@ -63,7 +64,7 @@ export class LoginComponent implements OnInit {
           console.log(this.tokenStorage.getUserRole());
           this.toastr.success('Đăng nhập thành công');
           this.router.navigate(['/dashboard']);
-        // }
+        }
       } else {
         this.toastr.warning('Thông tin đăng nhập không chính xác');
       }

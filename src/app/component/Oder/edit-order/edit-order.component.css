@@ -1,0 +1,16 @@
+table {
+  width: 100%;
+}
+
+td,
+th {
+  text-align: center;
+  width: 14%;
+}
+th {
+  font-weight: 500;
+  font-size: 15px;
+}
+.input-quantity{
+  width: 60%;
+}

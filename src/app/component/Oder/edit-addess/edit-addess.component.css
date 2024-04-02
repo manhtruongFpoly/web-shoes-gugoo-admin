@@ -1,0 +1,4 @@
+.edit-shipname ::ng-deep .mat-form-field-infix {
+  width: 630px !important;
+  height: 70px;
+}

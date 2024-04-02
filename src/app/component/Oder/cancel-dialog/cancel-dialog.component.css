@@ -1,0 +1,17 @@
+::ng-deep .mat-form-field-infix {
+  width: 650px !important;
+  height: 70px;
+}
+
+::ng-deep{
+  .mat-form-field-flex{
+    width: 655px;
+  }
+}
+
+ng-deep:host{
+  .mat-dialog-content {
+    overflow: hidden !important;
+  }
+}
+

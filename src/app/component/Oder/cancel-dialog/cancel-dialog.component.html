@@ -1,0 +1,54 @@
+<!-- <h1 mat-dialog-title class="text-center h3 font-weight-bold">
+  Hủy đơn hàng
+</h1>
+<div class="">
+  <div mat-dialog-content class="scroll-order-detail">
+
+    <div class="row">
+      <div class="col-12" style="margin: 0 20px;">
+        <form [formGroup]="cancelOrder">
+          <mat-form-field appearance="outline">
+            <mat-label>Lý do hủy đơn</mat-label>
+            <textarea formControlName="reason" matInput></textarea>
+            <mat-error *ngIf="cancelOrder.get('reason')?.hasError('required') || cancelOrder.get('reason')?.touched">
+              Lý do hủy đơn không được để trống
+            </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button class="btn btn-success m-2" (click)="onSubmit()">Đồng ý</button>
+  <button type="button" class="btn btn-secondary" (click)="close()" >Hủy</button>
+</div> -->
+
+
+
+<div class="modal-content modal-dialog-custom">
+  <div class="modal-header">
+    <h1 class="text-center h3 font-weight-bold">
+      Hủy đơn hàng
+    </h1>
+  </div>
+
+  <div class="modal-body" style="padding: 15px;">
+    <form [formGroup]="cancelOrder">
+      <mat-form-field appearance="outline">
+        <mat-label>Lý do hủy đơn</mat-label>
+        <textarea formControlName="reason" matInput></textarea>
+        <mat-error *ngIf="cancelOrder.get('reason')?.hasError('required') || cancelOrder.get('reason')?.touched">
+          Lý do hủy đơn không được để trống
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-success m-2" (click)="onSubmit()">Đồng ý</button>
+    <button type="button" class="btn btn-secondary" (click)="close()" >Hủy</button>
+  </div>
+</div>
+
+

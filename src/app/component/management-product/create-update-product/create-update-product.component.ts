@@ -8,6 +8,9 @@ import { CommonFunction } from 'src/app/utils/common-function';
 import { SizeService } from 'src/app/_service/size-service/size.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ProductService } from 'src/app/_service/product-service/product.service';
+import { CategoryService } from 'src/app/_service/category-service/category.service';
+import { BrandService } from 'src/app/_service/brand-service/brand.service';
+import { SpinnerComponent } from '../../spinner/spinner.component';
 
 @Component({
   selector: 'app-create-update-product',
@@ -17,6 +20,7 @@ import { ProductService } from 'src/app/_service/product-service/product.service
 export class CreateUpdateProductComponent implements OnInit {
 
   isUpdate = false;
+  isLoading: boolean = false;
 
   body = {
     id: null,
@@ -26,7 +30,10 @@ export class CreateUpdateProductComponent implements OnInit {
     discount: null,
     description: null,
     listTransSize: null,
-    listTransColor: null
+    listTransColor: null,
+    categoryId:null,
+    brandId: null,
+    quantity:null
   }
 
   validCode:ValidateInput = new ValidateInput();
@@ -35,6 +42,7 @@ export class CreateUpdateProductComponent implements OnInit {
   validDiscount:ValidateInput = new ValidateInput();
   validImg: ValidateInput = new ValidateInput();
   validDescriptions:ValidateInput = new ValidateInput();
+  validQuantity:ValidateInput = new ValidateInput();
 
   messagerListType: boolean;
   messagerListTypeColor: boolean;
@@ -46,6 +54,9 @@ export class CreateUpdateProductComponent implements OnInit {
   listImgAvail = [];
   listImgDelete = [];
 
+  listCategory;
+  listBrand;
+
   constructor(
     private changeDetechtorRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<CreateUpdateProductComponent>,
@@ -54,20 +65,44 @@ export class CreateUpdateProductComponent implements OnInit {
     private colorService: ColorService,
     private sizeService: SizeService,
     private sanitizer: DomSanitizer,
-    private productService: ProductService
-  ) { }
+    private productService: ProductService,
+    private categoryService: CategoryService,
+    private brandService: BrandService,
+  ) { 
+    if(data){
+      this.body.id = this.data.id;
+      this.body.code = this.data.code;
+      this.body.name = this.data.name;
+      this.body.price = this.data.price;
+      this.body.discount = this.data.discount;
+      this.body.listTransSize = JSON.parse(this.data.listSizes).map(x => x.key);
+      this.body.listTransColor = JSON.parse(this.data.listColors).map(x => x.key);
+      this.listImgAvail = this.data.imgList?.split(',');
+      this.body.brandId = this.data.brandId;
+      this.body.categoryId = this.data.categoryId;
+      this.body.quantity = this.data.quantity;
+    }
+  }
 
   ngOnInit():void {
     this.listSize();
     this.listColor();
-    this.body.id = this.data.id;
-    this.body.code = this.data.code;
-    this.body.name = this.data.name;
-    this.body.price = this.data.price;
-    this.body.discount = this.data.discount;
-    this.body.listTransSize = JSON.parse(this.data.listSizes).map(x => x.key);
-    this.body.listTransColor = JSON.parse(this.data.listColors).map(x => x.key);
-    this.listImgAvail = this.data.imgList?.split(',');
+    this.getAllBrand();
+    this.getAllCategory();
+  }
+
+
+ 
+  getAllCategory(){
+    this.categoryService.getAllCategoryByStatus().subscribe((res:any)=>{
+      this.listCategory = res.data;
+    })
+  }
+
+  getAllBrand(){
+    this.brandService.getAllBrand().subscribe((res:any)=>{
+      this.listBrand = res.data;
+    })
   }
 
   validate(){
@@ -105,10 +140,11 @@ export class CreateUpdateProductComponent implements OnInit {
     this.validateCode();
     this.validateName();
     this.validatePrice();
-    this.validateDiscount();
-    this.validDescription();
+    // this.validateDiscount();
+    // this.validDescription();
+    this.validateQuantity();
 
-    if (!this.validCode.done || !this.validName.done || !this.validPrice.done || !this.validDiscount.done || !this.validDescriptions.done || !this.validateImg()) return;
+    if (!this.validCode.done || !this.validName.done || !this.validPrice.done || !this.validQuantity.done || !this.validateImg()) return;
 
     this.uploadImage();
   }
@@ -121,13 +157,17 @@ export class CreateUpdateProductComponent implements OnInit {
     this.validName = CommonFunction.validateInput(this.body.name, 250, null)
   }
 
+  validateQuantity(){
+    this.validQuantity = CommonFunction.validateInput(this.body.quantity, null, null)
+  }
+
   validatePrice(){
     this.validPrice = CommonFunction.validateNumberInput(this.body.price, null, null);
   }
 
-  validateDiscount(){
-    this.validDiscount = CommonFunction.validateNumberInput(this.body.discount, null, null)
-  }
+  // validateDiscount(){
+  //   this.validDiscount = CommonFunction.validateNumberInput(this.body.discount, null, null)
+  // }
 
   validDescription(){
     this.validDescriptions = CommonFunction.validateInput(this.body.description, 1000, null);
@@ -203,7 +243,6 @@ export class CreateUpdateProductComponent implements OnInit {
     files.target.value = null;
   }
 
-  isLoading: boolean = true;
   products: any[] = [];
 
   selectedFiles?: FileList;
@@ -232,7 +271,8 @@ export class CreateUpdateProductComponent implements OnInit {
     }
   }
 
-  uploadImage() {
+    uploadImage() {
+    this.isLoading = true;
     this.productService.uploadImages({
       data: this.body,
       listFileUpload: this.listFileUpload,
@@ -240,6 +280,7 @@ export class CreateUpdateProductComponent implements OnInit {
     }).subscribe(response => {
       this.isLoading = false;
       this.toaStr.success('Create category successfuly');
+      this.isLoading = false;
       console.log(response.data);
     })
   }

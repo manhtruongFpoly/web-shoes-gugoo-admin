@@ -315,13 +315,11 @@ export class ManagementProductComponent implements OnInit {
       {
         headerName: '',
         field: 'undefined',
-        // pinned: 'right',
         suppressMovable: true,
         cellClass: 'cell-action',
         cellRendererFramework: ActionProductManageComponent,
         minWidth: 48,
         maxWidth: 48,
-        // hide: this.checkNotEdit(),
         cellStyle: {
           transform: 'translateX(10px)',
         },
@@ -366,7 +364,10 @@ export class ManagementProductComponent implements OnInit {
       maxHeight: '80vh',
       autoFocus: false,
       panelClass: 'view-detail-prompt'
-    }).afterClosed();
+    }).afterClosed().subscribe(result => {
+      this.ngOnInit();
+    })
+    
   }
 
   onGridReady(params) {

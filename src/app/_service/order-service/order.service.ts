@@ -149,8 +149,8 @@ export class OrderService {
   }
 
   // tạo order-detail
-  createOrderDetail(idO: any, idP: any){
-    return this.http.get(URL_orderdetail + '/create-order-detail/' + idO + "/" + idP);
+  createOrderDetail(data: any):Observable<any>{
+    return this.http.post(URL_orderdetail + `/create-order-detail`,data);
   }
 
   // tính tổng tiền theo order id

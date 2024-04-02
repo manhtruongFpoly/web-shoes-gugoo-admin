@@ -1,0 +1,49 @@
+<h1 mat-dialog-title class="text-center h3 font-weight-bold">
+  Đổi thông tin người nhận
+</h1>
+<div class="edit-shipname">
+  <div mat-dialog-content class="scroll-order-detail">
+
+
+
+    <form [formGroup]="formGroup">
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field appearance="outline">
+            <mat-label>Họ và tên</mat-label>
+            <input formControlName="fullname" matInput>
+          </mat-form-field>
+          <!-- <div *ngIf="formGroup.controls['fullname'].invalid && formGroup.controls['fullname'].touched"
+            class="text-danger">
+            <small *ngIf="formGroup.controls['fullname'].errors?.['required']"> Họ tên không được
+              để
+              trống</small>
+          </div> -->
+        </div>
+        <div class="col-12">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Số điện thoại</mat-label>
+            <input formControlName="phone" matInput>
+          </mat-form-field>
+          <!-- <div *ngIf="formGroup.controls['phone'].invalid && formGroup.controls['phone'].touched" class="text-danger">
+            <small *ngIf="formGroup.controls['phone'].errors?.['required']"> Số điện thoại không được
+              để
+              trống</small>
+            <small *ngIf="formGroup.controls['phone'].errors?.['pattern']"> Số điện thoại không đúng định dạng
+            </small>
+          </div> -->
+        </div>
+      </div>
+
+    </form>
+
+
+
+
+  </div>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button type="button" class="btn btn-success m-2" (click)="onSubmit()">Xác nhận</button>
+  <button type="button" class="btn btn-secondary" (click)="close()">Hủy</button>
+</div>

@@ -38,6 +38,10 @@
     }
 }
 
+.background-color{
+  background-color: #D14343 !important;
+}
+
 .input-typing {
     width: 235px;
     height: 40px;
@@ -63,4 +67,10 @@
 }
 
 
+:host ::ng-deep {
 
+  .modal .modal-content{
+    width: 700px;
+  }
+
+}

@@ -1,0 +1,127 @@
+<h1 mat-dialog-title class="text-center h3 font-weight-bold">
+  Sửa thông tin đơn hàng
+</h1>
+<div class="order-detail2">
+  <div mat-dialog-content class="scroll-order-detail">
+
+
+    <h3 style="margin: 0 20px;">Địa chỉ:</h3>
+    <form [formGroup]="validFormAtTheCounterOrder">
+
+    <div class="row" style="margin: 0 5px;">
+      <div class="col-4">
+        <!--======TỈNH / THÀNH PHỐ ======-->
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Chọn Tỉnh/Thành phố</mat-label>
+            <mat-select formControlName="province"
+             [(ngModel)]="orderAt.province">
+              <mat-option *ngFor="let p of province" [value]="p.ProvinceID"
+                (onSelectionChange)="getDistrict(p.ProvinceID,p.ProvinceName);"
+                (click)="getDistrict(p.ProvinceID,p.ProvinceName); ">
+                {{p.ProvinceName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div
+            *ngIf="validFormAtTheCounterOrder.controls['province'].invalid && validFormAtTheCounterOrder.controls['province'].touched"
+            class="text-danger">
+            <!-- <small *ngIf="validFormAtTheCounterOrder.controls['province'].errors?.['required']"> Tỉnh/Thành phố
+              không
+              được
+              để trống</small> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <!--====== QUẬN / HUYỆN  ======-->
+        <mat-form-field appearance="outline">
+          <mat-label>Chọn Quận/Huyện</mat-label>
+          <mat-select formControlName="district" [(ngModel)]="orderAt.district">
+            <mat-option *ngFor="let d of district" [value]="d.DistrictID"
+              (onSelectionChange)="getWard(d.DistrictID, d.DistrictName)"
+              (click)="getWard(d.DistrictID, d.DistrictName);">
+              {{d.DistrictName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div
+            *ngIf="validFormAtTheCounterOrder.controls['district'].invalid && validFormAtTheCounterOrder.controls['district'].touched"
+            class="text-danger">
+            <!-- <small *ngIf="validFormAtTheCounterOrder.controls['district'].errors?.['required']"> Quận/Huyện
+              không
+              được
+              để trống</small> -->
+          </div>
+      </div>
+      <div class="col-4">
+        <div>
+          <!--====== PHƯỜNG / XÃ * ======-->
+          <mat-form-field appearance="outline">
+            <mat-label>Chọn Phường/Xã</mat-label>
+            <mat-select formControlName="ward" [(ngModel)]="orderAt.ward">
+
+              <mat-option *ngFor="let w of ward" [value]="w.WardCode" (click)="getWardName(w.WardName)">
+                {{w.WardName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div
+            *ngIf="validFormAtTheCounterOrder.controls['ward'].invalid && validFormAtTheCounterOrder.controls['ward'].touched"
+            class="text-danger">
+            <!-- <small *ngIf="validFormAtTheCounterOrder.controls['ward'].errors?.['required']"> Phường/Xã không được
+              để
+              trống</small> -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </form>
+  <div class="edit-shipname mt-3" style="margin: 0 15px;">
+    <h3>Thông tin người nhận:</h3>
+  <form [formGroup]="formGroup">
+    <div class="row">
+      <div class="col-12">
+        <mat-form-field appearance="outline">
+          <mat-label>Họ và tên</mat-label>
+          <input formControlName="fullname" matInput>
+        </mat-form-field>
+        <!-- <div *ngIf="formGroup.controls['fullname'].invalid && formGroup.controls['fullname'].touched"
+          class="text-danger">
+          <small *ngIf="formGroup.controls['fullname'].errors?.['required']"> Họ tên không được
+            để
+            trống</small>
+        </div> -->
+      </div>
+      <div class="col-12">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Số điện thoại</mat-label>
+          <input formControlName="phone" matInput>
+        </mat-form-field>
+        <!-- <div *ngIf="formGroup.controls['phone'].invalid && formGroup.controls['phone'].touched" class="text-danger">
+          <small *ngIf="formGroup.controls['phone'].errors?.['required']"> Số điện thoại không được
+            để
+            trống</small>
+          <small *ngIf="formGroup.controls['phone'].errors?.['pattern']"> Số điện thoại không đúng định dạng
+          </small>
+        </div> -->
+        <mat-form-field appearance="outline">
+          <mat-label>Ghi chú:</mat-label>
+          <textarea formControlName="description" matInput></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+
+  </div>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button type="button" class="btn btn-success m-2" (click)="onSubmit()" >Xác nhận</button>
+  <button type="button" class="btn btn-secondary" (click)="close()">Hủy</button>
+</div>

@@ -1,4 +1,4 @@
-<div id="categoryAdd" class="mt-5" style="margin-left: 280px;">
+<div id="categoryAdd" class="mt-5" style="margin-left: 280px; margin-right: 40px;">
   <div *ngIf="isLoading" class="loading">
     <div class="spinner-border text-primary spinner-center" role="status">
     </div>
@@ -13,13 +13,16 @@
             <div class="row">
               <h2>Tìm kiếm sản phẩm</h2>
               <div class="col">
-                <input type="text" class="input-typing overflow-dot" [(ngModel)]="codeProduct" (change)="filterByCodeProduct($event)"
-                  (change)="confirmAddProduct(cancelled)" [value]="resetFilterByCode" placeholder="Search by code" />
+                <input type="text" 
+                   class="input-typing overflow-dot" 
+                   [(ngModel)]="codeProduct" (change)="filterByCodeProduct(1)"
+                   [value]="resetFilterByCode" placeholder="Search by code" />
               </div>
-              <div class="col">
-                <input type="text" class="input-typing overflow-dot" [(ngModel)]="title" (change)="searchTitle($event)"
-                  (change)="confirmAddProduct(cancelled)" placeholder="Search by name and price" />
-              </div>
+              <!-- <div class="col">
+                <input type="text" class="input-typing overflow-dot" 
+                       [(ngModel)]="title" (change)="searchTitle($event)"
+                       placeholder="Search by name and price" />
+              </div> -->
             </div>
           </div>
           <div class="col-6">
@@ -48,8 +51,12 @@
             Hóa đơn {{i + 1}}</mat-button-toggle>
         </mat-button-toggle-group> -->
         <button *ngFor="let item of listOrder let i = index"
-        (click)="getOneOrder(item.id)">
-        value="{{item.id}}"</button>
+                (click)="getOneOrder(item.id);clickIndexButton(i)"
+                class="btn btn-secondary"
+                [ngClass]="{'background-color': validateNameSection[i]}"
+                value="{{item.id}}" style="margin-left: 10px;">
+                Hóa đơn {{i + 1}}
+        </button>
       </div>
     </div>
   </div>
@@ -87,10 +94,10 @@
             </div>
 
             <div class="col-6">
-              <div class="d-flex flex-row">
+              <!-- <div class="d-flex flex-row">
                 <h1 class="">Nhân Viên:</h1>
                 <h1 class="text-danger"> {{delivery.nameStaff}}</h1>
-              </div>
+              </div> -->
 
               <div class="d-flex flex-row" *ngIf="delivery.orderStatus == 'DONCHO'">
                 <h1 class="">Loại Đơn:</h1>
@@ -136,19 +143,19 @@
 
 
       <!-- Tao hoa don dat hang -->
-      <div class="card mt-3">
+      <div class="card mt-3" *ngIf="doing">
 
         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
           <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+            <button class="nav-link active" id="pills-home-tab" (click)="setDeliveryOrder(0)" data-bs-toggle="pill" data-bs-target="#pills-home"
               type="button" role="tab" aria-controls="pills-home" aria-selected="true">Tại Quầy</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+            <button class="nav-link" id="pills-profile-tab" (click)="setDeliveryOrder(1)" data-bs-toggle="pill" data-bs-target="#pills-profile"
               type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Đơn Giao</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
+            <button class="nav-link" id="pills-contact-tab" (click)="setDeliveryOrder(2)" data-bs-toggle="pill" data-bs-target="#pills-contact"
               type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Đơn Lẻ</button>
           </li>
         </ul>
@@ -161,17 +168,20 @@
                     <label class="input-label">Họ Và Tên</label>
                     <input type="text" [(ngModel)]="orderAt.fullname"  class="input-typing overflow-dot" />
                 </div>
-                <div class="col-4">
+                <!-- <div class="col-4">
                     <label class="input-label" for="phone">Số Điện Thoại</label>
                     <input [(ngModel)]="orderAt.phone"
                       (change)="searchFullnameOrder($event)"  class="input-typing overflow-dot" />
-                </div>
+                </div> -->
+                <div class="col-4">
+                  <label class="input-label" for="phone">Số Điện Thoại</label>
+                  <input [(ngModel)]="orderAt.phone" class="input-typing overflow-dot" />
+              </div>
                 <div class="col-4">
                 </div>
               </div>
-              <div class="row" style="overflow-x:auto; margin-left: 5px; margin-bottom: 10px;">
+              <div class="row" style="margin-left: 5px; margin-bottom: 10px;">
                 <div class="col-4">
-                  <div>
                     <label> Chọn Tỉnh/Thành phố *</label>
                     <ng-select  
                           [items]="province" 
@@ -184,7 +194,6 @@
                           (change)="getDistrict($event)"
                           [clearable]="false">
                     </ng-select>
-                  </div>
                 </div>
                 <div class="col-4">
                   <label>Chọn Quận/Huyện</label>
@@ -198,71 +207,63 @@
                        (change)="getWard($event)"
                        [clearable]="false">
                   </ng-select>
-
-
                 </div>
                 <div class="col-4">
-                  <div>
-                    <label>Chọn Phường/Xã</label>
-                    <ng-select [items]="ward" 
-                        placeholder="Lựa chọn" 
-                        class="input-select" 
-                        bindLabel="WardName" 
-                        bindValue="WardID"
-                        [(ngModel)]="ward" 
-                        (change)="selectWard($event)"
-                        [searchable]="false" 
-                        [clearable]="false">
-                    </ng-select>
-                  </div>
+                  <label>Chọn Phường/Xã</label>
+                  <ng-select [items]="ward" 
+                      placeholder="Lựa chọn" 
+                      class="input-select" 
+                      bindLabel="WardName" 
+                      bindValue="WardID"
+                      [(ngModel)]="ward" 
+                      (change)="selectWard($event)"
+                      [searchable]="false" 
+                      [clearable]="false">
+                  </ng-select>
                 </div>
-
               </div>
 
               <div class="row" style="margin-left: 7px;">
                 <div class="form-group">
                   <label for="">Mo ta</label>
-                  <textarea  class="form-control textarea-typing"  style="width: 780px;"
+                  <textarea  class="form-control textarea-typing"  style="width: 740px;"
                     [(ngModel)]="orderAt.description">
                   </textarea>
                 </div>
               </div>
 
-              <div class="row mt-3">
-                <div class="col-3"></div>
-                <div class="col-9">
-                  <div class="row">
-                    <div class="col-8">
-                      <div class="mt-2" *ngIf="doing">
-                        <button [disabled]="validFormAtTheCounterOrder.invalid" (click)="updateAtTheCounter()"
-                          class="btn btn-success">
-                          Update
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div class="mt-2" *ngIf="doing" style="display: flex;justify-content: center;margin: 15px;">
+                <button (click)="updateAtTheCounter()" style="width: 300px;"
+                  class="btn btn-success">
+                  Update
+                </button>
               </div>
           </div>
 
           <!-- Tạo đơn giao -->
-          <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
-            tabindex="0">
+          <div class="tab-pane fade" id="pills-profile"  role="tabpanel" aria-labelledby="pills-profile-tab"
+            tabindex="0" >
               <div class="row" style="margin-left: 5px; margin-bottom: 10px;">
                 <div class="col-4">
                     <label class="input-label" for="fullname">Họ Và Tên</label>
                     <input type="text" [(ngModel)]="delivery.fullname"
                       class="input-typing overflow-dot" />
                 </div>
-                <div class="col-4">
+                <!-- <div class="col-4">
                     <label class="input-label">Số Điện Thoại</label>
                     <input type="text"[(ngModel)]="delivery.phone"
                       (change)="searchFullnameOrder($event)" class="input-typing overflow-dot" />
-                </div>
+                </div> -->
+                <div class="col-4">
+                  <label class="input-label">Số Điện Thoại</label>
+                  <input type="text"[(ngModel)]="delivery.phone"
+                         class="input-typing overflow-dot" />
+              </div>
                 <div class="col-4">
                   <div *ngIf="!doing">
                       <label class="input-label">Tiền Shipping</label>
-                      <input [value]="shippingTotal" class="input-typing overflow-dot" disabled />
+                      <input [value]="shippingTotal" 
+                             class="input-typing overflow-dot" disabled />
                   </div>
 
                   <div *ngIf="doing">
@@ -274,7 +275,7 @@
                 </div>
 
               </div>
-              <div class="row" style="overflow-x:auto; margin-left: 5px; margin-bottom: 10px;">
+              <div class="row" style=" margin-left: 5px; margin-bottom: 10px;">
                 <div class="col-4">
                   <label>Chọn Tỉnh/Thành Phố</label>
                   <ng-select  [items]="province" 
@@ -320,7 +321,7 @@
               <div class="row" style="margin-left: 7px;">
                 <div class="form-group">
                   <label for="">Mo ta</label>
-                  <textarea  class="form-control textarea-typing"  style="width: 780px;"
+                  <textarea  class="form-control textarea-typing"  style="width: 740px;"
                   [(ngModel)]="delivery.description">
                   </textarea>
                 </div>
@@ -331,7 +332,7 @@
                   <div class="row">
                     <div class="col-6">
                       <div class="mt-2" *ngIf="doing" style="margin-bottom: 10px;">
-                        <button [disabled]="validFormDeliveryOrder.invalid" style="width: 300px;" (click)="updateDeliveryOrders()"
+                        <button  style="width: 300px;" (click)="updateDeliveryOrders()"
                           class="btn btn-success">
                           Update
                         </button>
@@ -347,25 +348,15 @@
           <!-- Tạo đơn hàng lẻ -->
           <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"
             tabindex="0">
-            <div class="row">
-              <div class="col-4"></div>
-              <div class="col-4"></div>
-              <div class="col-4">
-                <button (click)="createRetailOrder()" class="btn btn-primary">Tạo đơn lẻ</button>
-              </div>
+            <div style="display: flex;justify-content: center; margin: 20px;">
+                <button (click)="createRetailOrder()" style="width: 300px;" class="btn btn-primary">Tạo đơn lẻ</button>
             </div>
           </div>
         </div>
-
       </div>
-
-
-
     </div>
 
     <div class="col-6 m-0 p-0">
-
-
       <!-- bang thong tin san pham dat -->
       <div class="card">
         <div class="card-header h-25 bg-primary">
@@ -380,33 +371,37 @@
                 <th>Tên Sản Phẩm</th>
                 <th>Giá</th>
                 <th>Số Lượng</th>
+                <th>Size</th>
+                <th>Mau</th>
                 <th>Tổng Tiền</th>
                 <th>Thao Tác</th>
               </tr>
             </thead>
             <tbody class="align-middle">
               <tr *ngFor="let orderD of orderDetails">
-                <td class="align-middle">{{ orderD.name }}</td>
-                <td class="align-middle">{{ orderD.price | currency:'VND' }}</td>
+                <td class="align-middle">{{ orderD.productName }}</td>
+                <td class="align-middle">{{ orderD.productPrice | currency:'VND' }}</td>
                 <td class="align-middle">
                   <div class="input-group quantity mx-auto" style="width: 100px;">
                     <div class="input-group-btn">
-                      <button (click)="minusQuantity(orderD.product_id,orderD.order_id,orderD.quantity)"
+                      <button (click)="minusQuantity(orderD.productId,orderD.orderId,orderD.quantity)"
                         class="btn btn-sm btn-primary btn-minus">
                         <i class="fa fa-minus"></i>
                       </button>
                     </div>
                     <input type="text" class="form-control form-control-sm bg-white text-dark text-center"
-                      (change)="updateQuantity(orderD.product_id,orderD.order_id,orderD.quantity)"
+                      (change)="updateQuantity(orderD.productId,orderD.orderId,orderD.quantity)"
                       [(ngModel)]="orderD.quantity">
                     <div class="input-group-btn">
-                      <button (click)="plusQuantity(orderD.product_id,orderD.order_id,orderD.quantity)"
+                      <button (click)="plusQuantity(orderD.productId,orderD.orderId,orderD.quantity)"
                         class="btn btn-sm btn-primary btn-plus">
                         <i class="fa fa-plus"></i>
                       </button>
                     </div>
                   </div>
                 </td>
+                <td class="align-middle">{{ orderD.sizeName}}</td>
+                <td class="align-middle">{{ orderD.colorName}}</td>
                 <td class="align-middle">{{ orderD.total | currency:'VND' }}</td>
                 <td class="align-middle"><button (click)="deleteOrderDetail(orderD.id)"
                     class="btn btn-sm btn-primary"><i class="fa fa-times"></i></button></td>
@@ -425,9 +420,9 @@
               <h1 class="text-danger"> {{ totalAmount | currency:'VND' }}</h1>
             </div>
 
-            <div class="d-flex flex-row">
+            <div class="d-flex flex-row" *ngIf="isDeliveryOrder">
               <h1 class="">Tiền shipping:</h1>
-              <h1 class="text-danger"> {{ ship | currency:'VND'}}</h1>
+              <h1 class="text-danger"> {{ shippingTotal | currency:'VND'}}</h1>
             </div>
             <hr />
             <div class="d-flex flex-row">
@@ -457,7 +452,7 @@
 
 
   <!-- Thong tin sản phẩm-->
-  <ng-template #cancelled let-c="close" let-d="dismiss">
+  <ng-template #cancelled let-c="close" let-d="dismiss" class="customer">
     <div class="modal-header">
       <h1 class="modal-title">Danh Sách Sản Phẩm</h1>
       <button type="button" class="close" aria-label="close" (click)="d('Cross click')">
@@ -465,30 +460,28 @@
       </button>
     </div>
     <div class="modal-body">
-
-      <div class="card mb-2" *ngIf="doing">
+      <!-- <div class="card mb-2" *ngIf="doing === true">
         <div class="card-body">
           <div class="row">
             <div class="d-flex flex-row">
-              <!-- <h1> {{productIamges.name}}</h1> -->
+              <h1> {{rowData.name}}</h1>
             </div>
           </div>
           <div class="row">
             <div class="col-5">
-               <!-- <img src="{{productIamges.imageLink}}" class="img-fluid" alt=""> -->
             </div>
             <div class="col-7">
               <div class="d-flex flex-row">
                 <h1 class="">- Mã SP: </h1>
-                <!-- <h1> {{productIamges.code}}</h1> -->
+                <h1> {{rowData.code}}</h1>
               </div>
               <div class="d-flex flex-row">
                 <h1 class="">- Giá: </h1>
-                <!-- <h1 class="text-danger"> {{productIamges.priceNew | currency:'VND'}}</h1> -->
+                <h1 class="text-danger"> {{rowData.priceNew | currency:'VND'}}</h1>
               </div>
               <div class="d-flex flex-row">
                 <h1 class="">- Số lượng: </h1>
-                <!-- <h1> {{productIamges.quantity}}</h1> -->
+                <h1> {{rowData.quantity}}</h1>
               </div>
             </div>
           </div>
@@ -498,19 +491,12 @@
               <button (click)="createOrderDetail()" (click)="c('Close click')" class="btn btn-success">Thêm</button>
             </div>
             <div class="col-4">
-              <!-- <a [routerLink]="['/product-detail', productIamges.id]" (click)="c('Close click')"
-                class="btn btn-primary">Xem chi tiết</a> -->
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- <div *ngIf="!doing">
-        <h1 class="text-danger">Không tìm thấy sản phẩm</h1>
       </div> -->
-
-      <div *ngIf="isDoing">
-        <div class="card mb-2" *ngFor="let item of products">
+      <div>
+        <div class="card mb-2" *ngFor="let item of rowData">
           <div class="card-body">
             <div class="row">
               <div class="d-flex flex-row">
@@ -519,7 +505,7 @@
             </div>
             <div class="row">
               <div class="col-5">
-                <img src="{{item.imageLink}}" class="img-fluid" alt="">
+                <!-- <img src="{{item.imageLink}}" class="img-fluid" alt=""> -->
               </div>
               <div class="col-7">
                 <div class="d-flex flex-row">
@@ -534,12 +520,31 @@
                   <h1 class="">- Số lượng: </h1>
                   <h1> {{item.quantity}}</h1>
                 </div>
+                <div class="d-flex flex-row">
+                  <label for="" style="color: #222; font-size: .9em;font-weight: 700; margin-right: 40px;">Size:</label>
+                  <div style="border: 1px solid gray;padding: 5px 11px; margin-right: 10px; cursor: pointer;" 
+                      *ngFor="let item of listSize"
+                      [ngStyle]="{'border': selectedSize === item.key ? '2px solid blue' : '1px solid gray'}"
+                      (click)="selectSize(item)">
+                      {{item.value}}
+                  </div>
+                </div>
+                <div class="d-flex flex-row">
+                  <label for="" style="color: #222; font-size: .9em;font-weight: 700; margin-right: 40px;">Màu:</label>
+                  <div 
+                    style="border: 1px solid gray;padding: 5px 11px; margin-right: 10px; cursor: pointer;"
+                    [ngStyle]="{'border': selectedColor === item.key ? '2px solid blue' : '1px solid gray'}"
+                    (click)="selectColor(item)"
+                    *ngFor="let item of listColor"
+                    >{{item.value}}
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row">
               <div class="col-5"></div>
               <div class="col-3">
-                <button (click)="createOrderDetail()" (click)="c('Close click')" class="btn btn-success">Thêm</button>
+                <button (click)="createOrderDetail(item)" (click)="c('Close click')" class="btn btn-success">Thêm</button>
               </div>
               <div class="col-4">
                 <a [routerLink]="['/product-detail', item.id]" (click)="c('Close click')" class="btn btn-primary">Xem
@@ -549,8 +554,6 @@
           </div>
         </div>
       </div>
-
-
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancel</button>

@@ -1,0 +1,66 @@
+<div class="modal-header">
+  <h1 class="modal-title">Danh Sách Sản Phẩm</h1>
+</div>
+<div class="modal-body">
+  <div>
+    <div class="card mb-2" *ngFor="let item of rowData">
+      <div class="card-body">
+        <div class="row">
+          <div class="d-flex flex-row">
+            <h1> {{item.name}}</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5">
+            <img src="{{img}}" style="width: 230px;" class="img-fluid" alt="">
+          </div>
+          <div class="col-7">
+            <div class="d-flex flex-row">
+              <h1 class="">- Mã SP: </h1>
+              <h1> {{item.code}}</h1>
+            </div>
+            <div class="d-flex flex-row">
+              <h1 class="">- Giá: </h1>
+              <h1 class="text-danger"> {{item.priceNew | currency:'VND'}}</h1>
+            </div>
+            <div class="d-flex flex-row">
+              <h1 class="">- Số lượng: </h1>
+              <h1> {{item.quantity}}</h1>
+            </div>
+            <div class="d-flex flex-row">
+              <label for="" style="color: #222; font-size: .9em;font-weight: 700; margin-right: 40px;">Size:</label>
+              <div style="border: 1px solid gray;padding: 5px 11px; margin-right: 10px; cursor: pointer;" 
+                  *ngFor="let item of listSize"
+                  [ngStyle]="{'border': selectedSize === item.key ? '2px solid blue' : '1px solid gray'}"
+                  (click)="selectSize(item)">
+                  {{item.value}}
+              </div>
+            </div>
+            <div class="d-flex flex-row" style="margin-top: 7px;">
+              <label for="" style="color: #222; font-size: .9em;font-weight: 700; margin-right: 40px;">Màu:</label>
+              <div 
+                style="border: 1px solid gray;padding: 5px 11px; margin-right: 10px; cursor: pointer;"
+                [ngStyle]="{'border': selectedColor === item.key ? '2px solid blue' : '1px solid gray'}"
+                (click)="selectColor(item)"
+                *ngFor="let item of listColor"
+                >{{item.value}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div style="display: flex;justify-content: flex-end;">
+            <button style="margin-top: 20px;width: 150px;" (click)="createOrderDetail(item)"  class="btn btn-success">Thêm</button>
+          </div>
+          <!-- <div class="col-4">
+            <a [routerLink]="['/product-detail', item.id]" (click)="c('Close click')" class="btn btn-primary">Xem
+              chi tiết</a>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer" style="display: flex;justify-content: center;">
+  <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+</div>

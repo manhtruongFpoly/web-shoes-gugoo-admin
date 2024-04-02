@@ -1,0 +1,68 @@
+<div>
+  <a [routerLink]="'/list-orders'" class="btn btn-primary mt-5">Back</a>
+  <div class="row mt-2">
+    <div class="card">
+
+      <div class="card-header">
+        <h1>Thông tin đơn đặt hàng</h1>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-6">
+            <h1>Người đặt hàng: {{order.fullname}}</h1>
+            <h1>Số điện thoại: {{order.phone}}</h1>
+            <h1>Địa chỉ đặt hàng: {{order.province}},{{order.district}},{{order.ward}}</h1>
+          </div>
+          <div class="col-6">
+            <h1>Ngày đặt hàng: {{order.createDate | date: "dd/MM/yyyy"}}</h1>
+            <h1>Giảm giá: {{order.discount}}</h1>
+            <h1>Tiền Shipping: {{order.shipping}}</h1>
+          </div>
+        </div>
+        <hr />
+        <h1>Tổng tiền: {{order.grandTotal}}</h1>
+      </div>
+
+
+    </div>
+
+  </div>
+  <div class="row mt-3 mb-5">
+    <div class="card">
+
+      <div class="card-header">
+        <h1>Sản phẩm đã đặt hàng</h1>
+      </div>
+      <div class="card-body">
+        <hr />
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Stt</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Image</th>
+              <th>Grand Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of orderDetail">
+              <td>{{item.id}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.price}}</td>
+              <td>{{item.quantity}}</td>
+              <td>
+                <img src="{{item.image}}" alt="">
+
+              </td>
+              <td>{{item.total}}</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
