@@ -39,17 +39,6 @@
   <div class="row mt-3">
     <div class="card">
       <div class="card-header">
-        <!-- <mat-button-toggle-group
-        name="fontStyle"
-        aria-label="Font Style"
-        *ngFor="let item of listOrder let i = index"
-        (click)="getOneOrder(item.id)"
-        >
-          <mat-button-toggle
-           value="{{item.id}}"
-          >
-            Hóa đơn {{i + 1}}</mat-button-toggle>
-        </mat-button-toggle-group> -->
         <button *ngFor="let item of listOrder let i = index"
                 (click)="getOneOrder(item.id);clickIndexButton(i)"
                 class="btn btn-secondary"

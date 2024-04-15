@@ -11,7 +11,7 @@ import { SpinnerComponent } from './component/spinner/spinner.component';
 import { PaginationComponent } from './component/pagination/pagination.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { AgGridModule } from 'ag-grid-angular';
@@ -84,6 +84,7 @@ import { StatisticalComponent } from './component/statistical/statistical.compon
     ListOrderComponent,
     ListOrdersComponent,
     OrderInfoComponent,
+
     StatisticalComponent
   ],
   imports: [
@@ -114,8 +115,6 @@ import { StatisticalComponent } from './component/statistical/statistical.compon
 
     TableModule,
 
-
-
     ToastrModule.forRoot({
       timeOut: 4000,
       positionClass: 'toast-bottom-right',
@@ -126,6 +125,7 @@ import { StatisticalComponent } from './component/statistical/statistical.compon
   providers: [
     ToastrService,
     BsModalService,
+    DatePipe,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

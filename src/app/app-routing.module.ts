@@ -11,6 +11,8 @@ import { ListOrderComponent } from './component/Oder/list-order/list-order.compo
 import { ListOrdersComponent } from './component/Oder/list-orders/list-orders.component';
 import { InfoOrderComponent } from './component/Oder/info-order/info-order.component';
 import { ListAllOrderComponent } from './component/Oder/list-all-order/list-all-order.component';
+import { Statistical } from './_model/Statistical';
+import { StatisticalComponent } from './component/statistical/statistical.component';
 
 
 const routes: Routes = [
@@ -24,7 +26,7 @@ const routes: Routes = [
   {
     path: '', component: AuthenticatedComponent,
     children: [
-      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+      // { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'list-management-product', component: ManagementProductComponent, canActivate: [AuthGuard] },
       { path: 'buy-offline', component: BuyOfflineComponent, canActivate: [AuthGuard]},
 
@@ -32,7 +34,7 @@ const routes: Routes = [
       { path: 'list-orders', component: ListOrdersComponent, canActivate: [AuthGuard]},
       { path: 'info-order/:id', component: InfoOrderComponent, canActivate: [AuthGuard]},
       { path: 'all-order', component: ListAllOrderComponent, canActivate: [AuthGuard]},
-
+      { path: 'dashboard', component: StatisticalComponent, canActivate: [AuthGuard] },
     ]
   }
 ];

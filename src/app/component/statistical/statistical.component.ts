@@ -106,9 +106,6 @@ export class StatisticalComponent implements OnInit {
   chart3!: Chart;
   chart4!: Chart;
 
-
-
-
   constructor(
     private datepipe: DatePipe, 
     private statisticalService: StatisticalService, 
@@ -133,8 +130,6 @@ export class StatisticalComponent implements OnInit {
     this.getListHoaDonTungThangTheoNam();
     this.getListHoaDonTungNgayTheoThangVaNam();
   }
-
-
 
 
 
