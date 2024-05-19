@@ -272,11 +272,6 @@ export class StatisticalComponent implements OnInit {
     })
   };
 
-
-
-
-
-
   getStatisticalYear() {
     this.statisticalService.getall().subscribe(data => {
       console.log('dảa', data);

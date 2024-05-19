@@ -46,6 +46,10 @@ export class ListAllOrderComponent implements OnInit {
       id: 4,
       content: 'Đã hủy'
     },
+    {
+      id: 7,
+      content: 'Hoàn trả'
+    },
   ];
   orderStatus: any[] = [
     {
@@ -98,6 +102,8 @@ export class ListAllOrderComponent implements OnInit {
       this.getAll_DAGIAO();
     }else if (index == 4) {
       this.getAll_DAHUY();
+    } else if (index == 7) {
+      this.getAll_Refunds();
     }
   }
   filterOrderStatus(index: any){
@@ -145,6 +151,7 @@ export class ListAllOrderComponent implements OnInit {
     this.getAll_DANGVANCHUYEN();
     this.getAll_DAGIAO();
     this.getAll_DAHUY();
+    this.getAll_Refunds();
   }
 
   editAddress(data: any){
@@ -200,6 +207,20 @@ export class ListAllOrderComponent implements OnInit {
   }
   getAll_DANGXULY() {
     this.orderService.getAll_DANGXULY().subscribe(data => {
+      this.allOrder = new MatTableDataSource<any>(data.data);
+        this.allOrder.data = data.data;
+        // this.allOrder = res.data;
+        this.lengthAllOrder = data.data.length;
+        console.log(this.lengthAllOrder);
+        console.log(this.allOrder.data);
+        this.allOrder.paginator = this.paginator;
+        this.allOrder.sort = this.sort;
+    })
+
+  }
+
+  getAll_Refunds() {
+    this.orderService.getAll_REFUNDS().subscribe(data => {
       this.allOrder = new MatTableDataSource<any>(data.data);
         this.allOrder.data = data.data;
         // this.allOrder = res.data;

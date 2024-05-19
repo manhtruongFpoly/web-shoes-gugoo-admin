@@ -51,6 +51,7 @@ import { MatTableModule } from '@angular/material/table';
 import { TableModule } from 'primeng/table';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { StatisticalComponent } from './component/statistical/statistical.component';
+import { RefundsOrderComponent } from './component/Oder/refunds-order/refunds-order.component';
 
 
 
@@ -84,6 +85,7 @@ import { StatisticalComponent } from './component/statistical/statistical.compon
     ListOrderComponent,
     ListOrdersComponent,
     OrderInfoComponent,
+    RefundsOrderComponent,
 
     StatisticalComponent
   ],

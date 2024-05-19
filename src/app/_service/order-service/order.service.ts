@@ -38,6 +38,9 @@ export class OrderService {
   getAll_DAHUY(): Observable<any> {
     return this.http.get(URL_order +'/list-status/DAHUY');
   }
+  getAll_REFUNDS(): Observable<any> {
+    return this.http.get(URL_order +'/list-status/HOANTRA');
+  }
   filterOrderStatus(orderStatus: any): Observable<any>{
     return this.http.get(URL_order+'/filter-order/'+orderStatus);
   }
@@ -176,6 +179,10 @@ export class OrderService {
   // cập nhật số lượng đơn hàng chi tiết
   updateQuantityOrderDetail(productId: any, orderId: any, quantity: any, data: any){
     return this.http.put(URL_orderdetail + '/updateQuantity/' + productId + '/order/' + orderId + '?quantity=' + quantity,data);
+  }
+
+  refunds(id:any): Observable<any>{
+    return this.http.get(URL_order + '/refunds/' + id);
   }
 
 }

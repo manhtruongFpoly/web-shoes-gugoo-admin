@@ -6,6 +6,7 @@ import { Constant } from '../../../_constant/Constant';
 import { ConfirmDialogComponent } from '../../../_helper/confirm-dialog/confirm-dialog.component';
 import { EditOrderComponent } from '../edit-order/edit-order.component';
 import { ToastrService } from 'ngx-toastr';
+import { RefundsOrderComponent } from '../refunds-order/refunds-order.component';
 
 @Component({
   selector: 'app-order-info',
@@ -22,7 +23,10 @@ export class OrderInfoComponent implements OnInit {
     private matDialog: MatDialog,
     private toast: ToastrService,
     private matDialogRef: MatDialogRef<OrderInfoComponent>
-  ) { }
+  ) {
+    console.log(dataDialog);
+    
+   }
 
   ngOnInit() {
     console.log(this.dataDialog);
@@ -94,6 +98,23 @@ export class OrderInfoComponent implements OnInit {
       if (res == 'submit') {
         this.matDialogRef.close('submit');
       }
+    })
+  }
+
+  openOrderRefunds(order: any){
+    // this.matDialog.open(RefundsOrderComponent,{
+    //   width: '700px',
+    //   autoFocus: false,
+    //   data: order
+    // }).afterClosed().subscribe(res=>{
+    //   if (res == 'submit') {
+    //     this.matDialogRef.close('submit');
+    //   }
+    // })
+    this.OrderService.refunds(order.id).subscribe(res=>{
+      this.matDialogRef.close('submit');
+      this.toast.success('Hoàn trả đơn thành công');
+      window.location.reload()
     })
   }
 

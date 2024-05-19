@@ -131,6 +131,11 @@
           Đã hoàn thành
         </span>
       </div>
+      <div style="width: 140px" *ngIf="row.status=='HOANTRA'" class="bg-success p-2 rounded-pill text-center">
+        <span>
+          Hoàn trả
+        </span>
+      </div>
     </td>
   </ng-container>
 
@@ -148,10 +153,12 @@
           <button mat-menu-item>
             <span (click)="editAddress(row)">Sửa đơn</span>
           </button>
-          <!-- <button mat-menu-item>
-            <span (click)="editShipName(row)">Đổi người nhận</span>
-          </button> -->
         </div>
+        <!-- <div *ngIf="row.status == 'DAHOANTHANH'">
+          <button mat-menu-item>
+            <span>Hoàn trả</span>
+          </button>
+        </div> -->
       </mat-menu>
     </td>
   </ng-container>
